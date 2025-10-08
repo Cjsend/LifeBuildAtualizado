@@ -377,7 +377,7 @@ function getFilteredTasks() {
   let tasks = [...state.routines];
   const today = new Date();
   today.setHours(0, 0, 0, 0);
-  
+
   // 1. Filtro por View
   switch (state.currentView) {
     case 'hoje':
@@ -399,8 +399,10 @@ function getFilteredTasks() {
       });
       break;
     case 'calendario':
-      // No calendário, todas as tarefas com data são consideradas
       tasks = tasks.filter(task => task.date);
+      break;
+    case 'todasRotinas':
+      // Não filtra, mostra todas
       break;
   }
 
@@ -589,7 +591,6 @@ return (
   localTaskDate.getMonth() === fullDate.getMonth() &&
   localTaskDate.getFullYear() === fullDate.getFullYear()
 );
-// ...existing code...
     });
 
     tasksForDay.forEach(task => {
