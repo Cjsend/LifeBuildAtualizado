@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>LifeBuild — Painel Admin</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="brand">
+      <div>
+        <div>Life<strong class="destaque">Build</strong></div>
+        <div class="subtitle">Painel Administrador</div>
+      </div>
+    </div>
+
+    <nav>
+      <div class="nav-item active" data-section="dashboard">Dashboard</div>
+      <div class="nav-item" data-section="usuarios">Usuários</div>
+      <div class="nav-item" data-section="rotinas">Rotinas</div>
+      <div class="nav-item" data-section="mensagens">Mensagens</div>
+      <div class="nav-item" data-section="config">Configurações</div>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="small">Conectado como <strong>admin@lifebuild</strong></div>
+      <div class="btn-group">
+        <button class="btn">Novo usuário</button>
+        <button class="btn secondary">Exportar</button>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="header">
+      <div class="left-header">
+        <h1 class="visao-geral">Visão Geral</h1>
+        <div class="search">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M21 21l-4.35-4.35" stroke="#042950" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="11" cy="11" r="6" stroke="#042950" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <input class="search-button" placeholder="Buscar usuários, tarefas...">
+        </div>
+      </div>
+
+    <section class="grid">
+      <div class="card">
+        <h3>Usuários ativos:</h3>
+      </div>    
+
+      <div class="card">
+        <h3>Tarefas concluídas:</h3>
+      </div>
+
+      <div class="card">
+        <h3>Receita: </h3>
+      </div>
+    </section>
+
+    <section class="layout">
+      <div class="card">
+        <h3>Últimas rotinas criadas</h3>
+      </div>
+
+      <div class="card">
+        <h3>Mensagens recentes</h3>
+      </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // Simples troca de seção ativa no menu lateral
+    document.querySelectorAll('.nav-item').forEach(item => {
+      item.addEventListener('click', () => {
+        document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+        item.classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>
