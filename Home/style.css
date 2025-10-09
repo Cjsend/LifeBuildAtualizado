@@ -268,6 +268,12 @@ a {
 .btn.small {
     padding: 6px 17px;
     font-size: 0.8rem;
+    color:black
+}
+
+.btn.small:hover {
+    background-color: black;
+    color: #f7ad19;
 }
 
 .btn.danger {
@@ -748,9 +754,9 @@ textarea {
     cursor: pointer;
     font-weight: 500;
 }
-.calendar-event.priority-high { background-color: red; color: rgb(0, 0, 0);}
-.calendar-event.priority-medium { background-color: rgb(7, 205, 255); color: #000000; }
-.calendar-event.priority-low { background-color: green; color: #000000; }
+.calendar-event.priority-high { background-color:#00d9ff; color: rgb(0, 0, 0);}
+.calendar-event.priority-medium { background-color: rgba(23, 149, 180, 0.63); color: #000000; }
+.calendar-event.priority-low { background-color: rgb(29, 119, 131); color: #000000; }
 
 
 /* =================================================================
@@ -936,3 +942,4 @@ textarea {
     font-weight: 600;
     margin-bottom: 10px;
 }
+
