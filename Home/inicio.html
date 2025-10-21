@@ -8,7 +8,6 @@
   <link rel="stylesheet" href="style.css" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  
 </head>
 <body>
   <div class="app" data-layout="with-sidebar" data-theme="light">
@@ -20,7 +19,7 @@
 
           <a href="#" class="brand" aria-label="Página inicial">
             <span class="brand-mark" aria-hidden="true">✔</span>
-            <span class="brand-name">Life Build</span>
+            <span class="brand-name">Life build</span>
           </a>
 
           <div class="spacer"></div>
@@ -32,16 +31,12 @@
           <nav class="top-actions" aria-label="Ações rápidas">
             <button class="btn ghost" id="btnQuickAdd" aria-haspopup="dialog">+ Nova rotina</button>
             <div class="profile" id="profileMenu" aria-haspopup="menu">
-              <button class="avatar" aria-label="Abrir menu do usuário">
-                <a class="avatar" href="Config.html" aria-label="Abrir menu do usuário">
-                  <img src="Img/Ryo.jpg" alt="Avatar do usuário" />
-                </a>
-              </button>
+              <a class="avatar" href="#" aria-label="Abrir menu do usuário" id="btnOpenConfig">
+                <img src="img/Ryo.jpg" alt="Avatar do usuário" />
+              </a>
             </div>
           </nav>
       </header>
-  
-
 
     <div class="layout">
       <aside class="sidebar" id="sidebar" aria-label="Menu principal">
@@ -62,7 +57,7 @@
             <li><a class="tag" href="#" data-tag="saude">#saúde</a></li>
             <li><a class="tag" href="#" data-tag="estudos">#estudos</a></li>
           </ul>
-          <button class="btn small" id="btnAddTag">+ Nova Etiqueta</button>
+          <button class="btn small" id="btnAddTag">+ Nova etiqueta</button>
         </section>
 
         <section class="section">
@@ -74,23 +69,28 @@
             <li><a class="menu-link" href="#" data-filter="semData">Sem data</a></li>
           </ul>
         </section>
+
+        <section class="section">
+          <ul class="menu" role="list">
+            <li><a class="menu-link" href="#viewConfig" data-view="config">Configurações</a></li>
+          </ul>
+        </section>
       </aside>
 
       <main class="content">
         <header class="content-header">
           <h1 class="view-title" id="viewTitle">Hoje</h1>
-          <div class="view-actions">
-             </div>
+          <div class="view-actions"></div>
         </header>
 
-        <section class="view is-active" id="viewLista" data-viewmode="lista" aria-labelledby="viewTitle">
+        <!-- Views principais -->
+        <section class="view is-active" id="viewHoje" data-viewmode="lista" aria-labelledby="viewTitle">
           <ul class="task-list" id="taskListToday" role="list"></ul>
         </section>
 
-        <section class="view" id="viewHoje">
+        <section class="view" id="viewTodasRotinas" data-viewmode="lista" aria-labelledby="viewTitle">
           <ul class="task-list" role="list"></ul>
         </section>
-
 
         <section class="view" id="viewQuadro" data-viewmode="quadro" aria-labelledby="viewTitle">
           <div class="board" role="region" aria-label="Quadro de tarefas">
@@ -128,6 +128,111 @@
             <button class="btn icon only" id="calNext" aria-label="Próximo mês">›</button>
           </div>
           <div class="calendar-grid"></div>
+        </section>
+
+        <!-- View de Configurações -->
+        <section class="view" id="viewConfig" data-viewmode="config" aria-labelledby="viewTitle">
+          <div class="config-body">
+            <main class="profile-container">
+                <section class="profile-header">
+                  <div class="profile-banner"></div>
+                  <h1>Meu perfil</h1>
+                  <img src="img/Ryo.jpg" alt="Foto do perfil" class="profile-photo" />
+                  <input type="file" id="profilePhotoInput" accept="image/*" style="display:none;" />
+                  <div class="profile-info">
+                    <button class="btn edit-profile" id="btnEditProfile">Editar perfil de usuário</button>
+                  </div>
+                </section>
+
+                <section class="account-info">
+                  <div class="info-item">
+                    <label>Nome exibido</label>
+                    <div class="info-field">
+                      <span id="displayName">Carlos</span>
+                      <button class="edit-btn" data-edit="displayName">Editar</button>
+                    </div>
+                  </div>
+
+                  <div class="info-item">
+                    <label>Nome de usuário</label>
+                    <div class="info-field">
+                      <span id="userName">onror</span>
+                      <button class="edit-btn" data-edit="userName">Editar</button>
+                    </div>
+                  </div>
+
+                  <div class="info-item">
+                    <label>E-mail</label>
+                    <div class="info-field">
+                      <span id="userEmail">*****************@gmail.com</span>
+                      <a href="#" class="link" id="showEmail">Mostrar</a>
+                    </div>
+                  </div>
+                </section>
+            </main>
+
+            <h1 class="config-title">Configuração</h1>
+            <div class="config-option">
+              <label>Ativar notificações do navegador
+                <span style="float:right;">
+                  <label class="switch">
+                    <input type="checkbox" id="notificationsToggle">
+                    <span class="slider"></span>
+                  </label>
+                </span>
+              </label>
+            </div>
+
+            <div class="config-option">
+              <label>Modo escuro
+                <span style="float:right;">
+                  <label class="switch">
+                    <input type="checkbox" id="themeToggle">
+                    <span class="slider"></span>
+                  </label>
+                </span>
+              </label>
+            </div>
+
+            <div class="config-option">
+              <label for="appLanguage">Idioma do aplicativo
+                <span style="float:right;">
+                  <select id="appLanguage">
+                    <option value="pt-BR">Português</option>
+                    <option value="en-US">Inglês</option>
+                  </select>
+                </span>
+              </label>
+            </div>
+
+            <div class="config-option">
+              <label for="fontFamily">Fonte personalizada
+                <span style="float:right;">
+                  <select id="fontFamily">
+                    <option value="Inter">Inter</option>
+                    <option value="Arial">Arial</option>
+                    <option value="Roboto">Roboto</option>
+                    <option value="Georgia">Georgia</option>
+                    <option value="Courier New">Courier New</option>
+                  </select>
+                </span>
+              </label>
+            </div>
+
+            <div class="config-option">
+              <label for="fontSize">Tamanho da fonte
+                <span style="float:right;">
+                  <input type="range" id="fontSize" min="12" max="24" value="16" />
+                  <span id="fontSizeValue">16px</span>
+                </span>
+              </label>
+            </div>
+
+            <div class="form-actions">
+              <button class="btn primary" id="btnSaveSettings">Salvar Configurações</button>
+              <button class="btn secondary" id="btnResetSettings">Restaurar Padrões</button>
+            </div>
+          </div>
         </section>
 
       </main>
@@ -170,8 +275,7 @@
             <label class="field">
               <span>Etiqueta</span>
               <input type="text" id="taskTag" list="datalistTags" placeholder="#pessoal, #trabalho" />
-              <datalist id="datalistTags">
-                </datalist>
+              <datalist id="datalistTags"></datalist>
             </label>
           </div>
           <div class="actions">
@@ -187,7 +291,7 @@
     <dialog class="modal" id="modalQuickAdd" aria-labelledby="modalQuickAddTitle" aria-modal="true">
       <form method="dialog" class="modal-content" id="quickAddForm">
         <header class="modal-header">
-          <h2 class="title-adicionar "id="modalQuickAddTitle">Adicionar rotina</h2>
+          <h2 id="modalQuickAddTitle">Adicionar rotina</h2>
           <button class="btn icon only" value="cancel" aria-label="Fechar">✕</button>
         </header>
         <div class="modal-body">
@@ -203,9 +307,9 @@
             <label class="field">
               <span>Prioridade</span>
               <select id="quickPriority">
-                <option class="low" value="low">Baixa</option>
-                <option class="medium"value="medium" selected>Média</option>
-                <option class="high"value="high">Alta</option>
+                <option value="low">Baixa</option>
+                <option value="medium" selected>Média</option>
+                <option value="high">Alta</option>
               </select>
             </label>
           </div>
@@ -244,7 +348,6 @@
       </form>
     </dialog>
 
-    
     <div class="toasts" id="toasts" aria-live="polite" aria-atomic="true"></div>
 
     <footer class="footer" role="contentinfo">
@@ -295,7 +398,6 @@
     </div>
   </template>
 
-
-    <script defer src="script.js"></script>
-  </body>
+  <script defer src="script.js"></script>
+</body>
 </html>
