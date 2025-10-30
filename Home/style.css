@@ -7,26 +7,26 @@
    ======================= */
 :root {
     /* Cores Principais */
-    --color-primary: #fafafa;          /* Indigo 600 */
-    --color-primary-dark: #f7ad19;     /* Complementar da principal */
+    --color-primary: #ff5454;          /* Indigo 600 */
+    --color-primary-dark: #ff2c2c;     /* Indigo 800 */
 
     /* Texto */
-    --color-text-default: #f7ad19;     /* Texto padrão */
-    --color-text-secondary: #ffffff;   /* Texto secundário */
+    --color-text-default: #1f2937;     /* Gray 800 */
+    --color-text-secondary: #6b7280;   /* Gray 500 */
 
     /* Fundo */
-    --color-bg : #1E2A38 ;               /* Fundo geral */
-    --color-bg-alt: #042950;           /* Fundo alternativo (cards, modais, etc.) */
-    --color-sidebar-bg: #042950;       /* Fundo da barra lateral */
+    --color-bg: #ffffff;               /* Branco puro */
+    --color-bg-alt: #f9fafb;           /* Gray 50 */
+    --color-sidebar-bg: #f3f4f6;       /* Gray 100 */
 
     /* Bordas e Divisores */
-    --color-border: #09090a;
+    --color-border: #e5e7eb;           /* Gray 200 */
 
     /* Prioridades / Status */
-    --color-priority-high: #ef4444;    /* Vermelho */
-    --color-priority-medium: #f59e0b;  /* Amarelo */
-    --color-priority-low: #10b981;     /* Verde */
-    --color-danger: #ef4444;
+    --color-priority-high: #dc2626;    /* Red 600 */
+    --color-priority-medium: #d97706;  /* Amber 600 */
+    --color-priority-low: #059669;     /* Emerald 600 */
+    --color-danger: #dc2626;
 
     /* Layout */
     --sidebar-width: 250px;
@@ -36,33 +36,58 @@
     --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
     --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
                  0 2px 4px -1px rgba(0, 0, 0, 0.06);
-}
 
+
+    .calendar-day.today {
+    background-color: #ffffff;
+    }
+
+    .task-title {
+    font-weight: 600;
+    font-size: 1rem;
+    margin-bottom: 4px;
+    color: #000000;
+    }
+
+
+}
 /* =======================
    🌙 DARK MODE
    ======================= */
 .app[data-theme="dark"] {
     /* Cores Principais */
-    --color-primary: #d3d3d3;          /* Indigo 400 */
-    --color-primary-dark: #9e6262;
+    --color-primary: #ff5454;          /* Violet 500 */
+    --color-primary-dark: #ff5454;     /* Violet 600 */
 
     /* Texto */
-    --color-text-default: #16479b;     /* Texto principal */
-    --color-text-secondary: #144069;   /* Texto secundário */
+    --color-text-default: #ffffff;     /* Gray 100 */
+    --color-text-secondary: #d1d5db;   /* Gray 300 */
 
     /* Fundo */
-    --color-bg: #3b3f44;               /* Fundo geral */
-    --color-bg-alt: #dfdfdf;           /* Fundo alternativo (cards, modais, etc.) */
-    --color-sidebar-bg: #666c72;       /* Fundo da barra lateral */
+    --color-bg: #111827;               /* Gray 900 */
+    --color-bg-alt: #1f2937;           /* Gray 800 */
+    --color-sidebar-bg: #374151;       /* Gray 700 */
 
     /* Bordas e Divisores */
-    --color-border: #eff0f1;
+    --color-border: #4b5563;           /* Gray 600 */
 
-    /* Prioridades / Status (mantêm as mesmas cores do modo claro) */
-    --color-priority-high: #ef4444;
-    --color-priority-medium: #f59e0b;
-    --color-priority-low: #10b981;
+    /* Prioridades / Status */
+    --color-priority-high: #ef4444;    /* Red 500 */
+    --color-priority-medium: #f59e0b;  /* Yellow 500 */
+    --color-priority-low: #10b981;     /* Emerald 500 */
     --color-danger: #ef4444;
+
+    .calendar-day.today {
+    background-color: #111827;
+        }
+
+    .task-title {
+    font-weight: 600;
+    font-size: 1rem;
+    margin-bottom: 4px;
+    color: #d1d5db;
+    }
+
 }
 
 /* Base Reset e Tipografia */
@@ -74,10 +99,18 @@
 
 body {
     font-family: 'Inter', sans-serif;
-    background-color: var(--color-bg);
+    /* background moved to .app so theme overrides on .app[data-theme] take effect */
+    background-color: transparent;
     color: var(--color-text-default);
     line-height: 1.5;
     transition: background-color 0.3s, color 0.3s;
+}
+
+/* Apply global background on the .app container so theme variables defined on
+   .app[data-theme="dark"] are used when switching themes. .app already has
+   min-height:100vh so it covers the viewport. */
+.app {
+    background-color: var(--color-bg);
 }
 
 a {
@@ -114,7 +147,7 @@ a {
     align-items: center;
     font-size: 1.25rem;
     font-weight: 700;
-    color: var(--color-primary-dark);
+    color: var(--color-primary);
     margin-left: 8px;
 }
 
@@ -152,7 +185,6 @@ a {
     border: 2px solid var(--color-primary);
     cursor: pointer;
 }
-
 
 /* Layout principal (Sidebar + Content) */
 .layout {
@@ -202,17 +234,13 @@ a {
     margin-left: 0;
 }
 
-
-
-
 .footer {
     padding: 10px 20px;
     text-align: center;
     font-size: 0.75rem;
-    color: black;
+    color: var(--color-text-default);
     border-top: 1px solid var(--color-border);  
 }
-
 
 /* =================================================================
    COMPONENTES GERAIS: Botões, Menu, Fields
@@ -226,25 +254,26 @@ a {
     font-weight: 600;
     cursor: pointer;
     transition: background-color 0.2s, box-shadow 0.2s, opacity 0.2s;
-    background-color: #67798b;
-    color: #f7ad19;
+    background-color: var(--color-primary);
+    color: white;
     font-size: 0.875rem;
 }
 
 .btn:hover {
     background-color: var(--color-primary-dark);
-    box-shadow: var(--shadow-sm);
+    box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.2);
 }
 
 .btn.ghost {
     background-color: transparent;
-    color: #f7ad19;
-    border: 1px solid #f7ad19;
-    padding: 7px 15px; /* Ajuste para compensar a borda */
+    color: var(--color-primary);
+    border: 1px solid var(--color-primary);
+    padding: 7px 15px;
 }
 
 .btn.ghost:hover {
-    background-color: #666c72; /* Levemente transparente */
+    background-color: var(--color-primary);
+    color: white;
 }
 
 .btn.icon.only {
@@ -254,13 +283,13 @@ a {
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #f7ad19;
-    color: #020a13;
+    background-color: var(--color-primary);
+    color: white;
 }
 
 .btn.icon.only:hover {
-    background-color: #666c72;
-    color: #dbe6f1;
+    background-color: var(--color-primary-dark);
+    color: white;
     box-shadow: none;
     border-radius: 8px;
 }
@@ -268,12 +297,6 @@ a {
 .btn.small {
     padding: 6px 17px;
     font-size: 0.8rem;
-    color:black
-}
-
-.btn.small:hover {
-    background-color: black;
-    color: #f7ad19;
 }
 
 .btn.danger {
@@ -286,7 +309,8 @@ a {
     background-color: transparent;
 }
 .btn.danger.ghost:hover {
-    background-color: var(--color-danger)10;
+    background-color: var(--color-danger);
+    color: white;
 }
 
 /* Menu de Navegação */
@@ -300,6 +324,7 @@ a {
     color: var(--color-text-secondary);
     margin-bottom: 8px;
     font-weight: 600;
+    font-size: 1rem;
 }
 
 .menu {
@@ -310,20 +335,22 @@ a {
     display: block;
     padding: 8px 10px;
     border-radius: 6px;
-    color: var(--color-text-secondary);
+    color: var(--color-text-default);
     transition: background-color 0.2s, color 0.2s;
-    font-size: 0.9375rem;
+    font-size: 1rem;
 }
 
 .menu-link:hover {
-    background-color: var(--color-border);
-    color: var(--color-text-default);
+    background-color: var(--color-primary);
+    color: white;
+    font-size: 1rem;
 }
 
 .menu-link.is-active {
-    background-color: var(--color-primary)15;
-    color: var(--color-primary-dark);
+    background-color: var(--color-primary);
+    color: white;
     font-weight: 600;
+    font-size: 1rem;
 }
 
 /* Etiquetas */
@@ -356,9 +383,9 @@ a {
 }
 
 .field span {
-    font-size: 0.875rem;
+    font-size: 1rem;
     font-weight: 500;
-    color: var(--color-text-secondary);
+    color: var(--color-text-default);
     margin-bottom: 4px;
 }
 
@@ -405,7 +432,7 @@ textarea {
     right: 0;
     width: 400px;
     height: 100%;
-    background-color: #042950;
+    background-color: var(--color-bg-alt);
     border-left: 1px solid var(--color-border);
     box-shadow: -8px 0 16px rgba(0, 0, 0, 0.1);
     transform: translateX(100%);
@@ -417,6 +444,11 @@ textarea {
 
 .details.is-open {
     transform: translateX(0);
+}
+
+.actions {
+    display: flex;
+    gap: 8px;
 }
 
 .details-header {
@@ -452,8 +484,190 @@ textarea {
 }
 
 /* =================================================================
+   CONFIGURAÇÕES
+   ================================================================= */
+
+.config-body {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.profile-container {
+  background-color: var(--color-bg-alt);
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 24px;
+}
+
+.profile-header {
+  text-align: center;
+  position: relative;
+  margin-bottom: 24px;
+}
+
+.profile-banner {
+  height: 120px;
+  background-color: var(--color-primary);
+  border-radius: 8px 8px 0 0;
+  margin: -20px -20px 20px -20px;
+}
+
+.profile-photo {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  border: 4px solid var(--color-bg);
+  margin-top: -50px;
+  object-fit: cover;
+}
+
+.profile-info {
+  margin-top: 16px;
+}
+
+.account-info {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.info-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.info-item label {
+  font-weight: 600;
+  color: var(--color-text-default);
+}
+
+.info-field {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.edit-btn, .link {
+  color: var(--color-primary);
+  font-size: 0.875rem;
+  cursor: pointer;
+  background: none;
+  border: none;
+  text-decoration: underline;
+}
+
+.config-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 20px;
+  color: var(--color-text-default);
+}
+
+.config-option {
+  background-color: var(--color-bg-alt);
+  padding: 16px;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  border: 1px solid var(--color-border);
+}
+
+.config-option label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  font-weight: 500;
+  color: var(--color-text-default);
+}
+
+/* Switch Toggle */
+.switch {
+  position: relative;
+  display: inline-block;
+  color: var(--color-text-default);
+  width: 50px;
+  height: 24px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: .4s;
+  border-radius: 24px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: .4s;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: var(--color-primary);
+}
+
+input:checked + .slider:before {
+  transform: translateX(26px);
+}
+
+.form-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid var(--color-border);
+}
+
+.btn.primary {
+  background-color: var(--color-primary);
+  color: white;
+}
+
+.btn.secondary {
+  background-color: transparent;
+  color: var(--color-primary);
+  border: 1px solid var(--color-primary);
+}
+
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--color-text-secondary);
+  font-style: italic;
+}
+
+/* =================================================================
    VISUALIZAÇÕES: LISTA, QUADRO (KANBAN), CALENDÁRIO
    ================================================================= */
+
+.view {
+  display: none;
+}
+
+.view.is-active {
+  display: block;
+}
 
 /* Lista de Tarefas */
 .task-list {
@@ -463,8 +677,8 @@ textarea {
 }
 
 .task-list li {
-  background: #042950;
-  border: 1px solid var(--gray-300);
+  background: var(--color-bg-alt);
+  border: 1px solid var(--color-border);
   padding: 8px 12px;
   margin-bottom: 6px;
   border-radius: 8px;
@@ -487,7 +701,7 @@ textarea {
 }
 
 .task.is-completed {
-    background-color: #042950;
+    background-color: var(--color-sidebar-bg);
     text-decoration: line-through;
     font-style: italic;
 }
@@ -501,12 +715,12 @@ textarea {
     font-weight: 600;
     font-size: 1rem;
     margin-bottom: 4px;
+    color: #d1d5db;
 }
 
 .task-meta {
     display: flex;
     gap: 12px;
-    background-color: #042950;
     font-size: 0.75rem;
     color: var(--color-text-secondary);
 }
@@ -519,7 +733,6 @@ textarea {
 .task-meta .priority.high { color: var(--color-priority-high); }
 .task-meta .priority.medium { color: var(--color-priority-medium); }
 .task-meta .priority.low { color: var(--color-priority-low); }
-
 
 .task-meta .due.overdue {
     color: var(--color-danger);
@@ -542,16 +755,16 @@ textarea {
 .check {
     width: 20px;
     height: 20px;
-    background-color: #e49217;
-    border: 2px solid var(--color-text-secondary);
+    background-color: var(--color-bg);
+    border: 2px solid var(--color-border);
     border-radius: 4px;
     transition: background-color 0.2s, border-color 0.2s;
     display: inline-block;
 }
 
 .checkbox input:checked + .check {
-    background-color: #0c71dd;
-    border-color: #0c71dd;
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
 }
 
 .checkbox input:checked + .check::after {
@@ -564,26 +777,25 @@ textarea {
     font-size: 0.8rem;
 }
 
-
 /* Quadro Kanban */
 .board {
     display: flex;
     gap: 20px;
     overflow-x: auto;
-    padding-bottom: 10px; /* Para sombra dos cards */
+    padding-bottom: 10px;
 }
 
 .column {
     min-width: 300px;
     width: 33.33%;
-    background-color: var(--color-border)50;
+    background-color: var(--color-bg-alt);
     border-radius: 8px;
     padding: 12px;
     transition: background-color 0.2s;
 }
 
 .column.drag-over {
-    background-color: var(--color-primary)15;
+    background-color: var(--color-primary);
     outline: 2px dashed var(--color-primary);
     outline-offset: -4px;
 }
@@ -608,7 +820,7 @@ textarea {
 }
 
 .card {
-    background-color: var(--color-bg-alt);
+    background-color: var(--color-bg);
     border-radius: 6px;
     box-shadow: var(--shadow-sm);
     padding: 12px;
@@ -674,34 +886,36 @@ textarea {
 .calendar-title {
     font-size: 1.25rem;
     font-weight: 600;
+    color: var(--color-text-default);
 }
 
 .calendar-grid {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     border: 1px solid var(--color-border);
-    border-radius: 8px;
+    border-radius: 15px;
     overflow: hidden;
     background-color: var(--color-bg-alt);
+    gap:  7px;
+    box-shadow: var(--shadow-sm);
 }
 
 .calendar-day-header {
     text-align: center;
     padding: 8px;
     font-weight: 600;
-    color: #dbe6f1;
-    border-bottom: 1px solid #2C3E50;
-    border-right: 1px solid #2C3E50;
-    background-color: #092544;
+    color: white;
+    background-color: var(--color-primary);
+    border-radius: 10px;
 }
 
 .calendar-day {
     min-height: 120px;
     padding: 1px;
-    border-right: 2px solid #2C3E50;
-    border-bottom: 2px solid #2C3E50;
     position: relative;
-    background-color: #1F2E44;
+    border-radius: 10px;
+    background-color: var(--color-bg);
+    box-shadow: var(--shadow-sm);
 }
 
 .calendar-day:nth-child(7n) {
@@ -717,26 +931,24 @@ textarea {
     text-align: right;
     padding-right: 6px;
     margin-bottom: 4px;
-    color: #E0E6ED;
+    color: var(--color-text-default);
 }
 
 .calendar-day.other-month {
-    background-color: #17273a;
-    color: #04314e;
+    background-color: var(--color-sidebar-bg);
+    color: var(--color-text-secondary);
 }
 .calendar-day.other-month .calendar-day-number {
-    color: white;
+    color: var(--color-text-secondary);
 }
 
 .calendar-day.today {
-    background-color: #1F2E44;
+    background-color: #111827;
 }
 .calendar-day.today .calendar-day-number {
-    color: #000000;
-    background-color: #f7ad19;
-    border-radius: 50px;
-    margin-left: 177px;
-
+    color: white;
+    background-color: #ff5454;
+    border-radius: 12px;
 }
 
 .calendar-event {
@@ -753,11 +965,108 @@ textarea {
     border: none;
     cursor: pointer;
     font-weight: 500;
+    background-color: var(--color-primary);
+    color: white;
 }
-.calendar-event.priority-high { background-color:#00d9ff; color: rgb(0, 0, 0);}
-.calendar-event.priority-medium { background-color: rgba(23, 149, 180, 0.63); color: #000000; }
-.calendar-event.priority-low { background-color: rgb(29, 119, 131); color: #000000; }
+.calendar-event.priority-high { background-color: var(--color-priority-high); }
+.calendar-event.priority-medium { background-color: var(--color-priority-medium); }
+.calendar-event.priority-low { background-color: var(--color-priority-low); }
 
+/* =================================================================
+   GRÁFICOS - CORREÇÕES E MELHORIAS
+   ================================================================= */
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.container header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.container header h1 {
+  font-size: 2.5rem;
+  color: var(--color-text-default);
+  margin-bottom: 10px;
+}
+
+.subtitle {
+  font-size: 1.1rem;
+  color: var(--color-text-secondary);
+}
+
+.charts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 30px;
+  margin-bottom: 40px;
+}
+
+.chart-container {
+  background: var(--color-bg-alt);
+  border-radius: 12px;
+  padding: 25px;
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-sm);
+  transition: all 0.3s ease;
+}
+
+.chart-container:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-md);
+}
+
+.chart-title {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: var(--color-text-default);
+  text-align: center;
+}
+
+.chart-wrapper {
+  position: relative;
+  height: 300px;
+  width: 100%;
+}
+
+.info-text {
+  text-align: center;
+  color: var(--color-text-secondary);
+  font-size: 0.9rem;
+  margin-top: 15px;
+  font-style: italic;
+}
+
+.container footer {
+  text-align: center;
+  padding: 20px;
+  color: var(--color-text-secondary);
+  border-top: 1px solid var(--color-border);
+  margin-top: 40px;
+}
+
+/* Ajustes para gráficos específicos */
+#weeklyProgressChart,
+#timeDistributionChart,
+#habitsOverTimeChart,
+#lifeBalanceChart,
+#monthlyGoalsChart,
+#dailyProductivityChart {
+  width: 100% !important;
+  height: 100% !important;
+}
+/* Ajustes para modo escuro */
+.app[data-theme="dark"] .chart-container {
+  background-color: var(--color-sidebar-bg);
+}
+
+.app[data-theme="dark"] .charts-section {
+  background-color: var(--color-bg);
+}
 
 /* =================================================================
    MODAIS (DIALOG)
@@ -796,6 +1105,7 @@ textarea {
 .modal-header h2 {
     font-size: 1.25rem;
     font-weight: 700;
+    color: var(--color-text-default);
 }
 
 .modal-body {
@@ -834,6 +1144,7 @@ textarea {
     min-width: 250px;
     border-left: 4px solid var(--color-primary);
     transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+    color: var(--color-text-default);
 }
 
 .toast.success { border-color: var(--color-priority-low); }
@@ -856,14 +1167,6 @@ textarea {
     transform: translateX(100%);
 }
 
-.footer {
-    padding: 10px 20px;
-    text-align: center;
-    font-size: 0.75rem;
-    color: var(--color-text-secondary);
-    border-top: 1px solid var(--color-border);
-}
-
 /* =================================================================
    RESPONSIVIDADE (Celulares e Tablets)
    ================================================================= */
@@ -877,7 +1180,7 @@ textarea {
         height: calc(100% - var(--header-height));
         z-index: 500;
         box-shadow: var(--shadow-md);
-        width: 280px; /* Pouco mais largo no mobile */
+        width: 280px;
     }
     
     .app[data-layout="without-sidebar"] .sidebar {
@@ -886,14 +1189,14 @@ textarea {
 
     /* Topbar */
     .topbar .now {
-        display: none; /* Esconde data/hora no mobile */
+        display: none;
     }
     .topbar .brand-name {
-        display: none; /* Esconde o nome da marca */
+        display: none;
     }
     
     .btn#btnQuickAdd {
-        font-size: 0; /* Esconde o texto */
+        font-size: 0;
         padding: 8px 10px;
     }
     .btn#btnQuickAdd::before {
@@ -922,24 +1225,42 @@ textarea {
     .modal {
         margin: auto 10px;
     }
+
+    /* Configurações */
+    .config-option label {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .info-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .info-field {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+  .charts-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  
+  .charts-section {
+    padding: 16px;
+    margin-top: 24px;
+  }
+  
+  .chart-wrapper {
+    height: 220px;
+  }
+  
+  .charts-header {
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+  }
 }
-
-/* =================================================================
-   VISUALIZAÇÕES: LISTA, QUADRO (KANBAN), CALENDÁRIO
-   ================================================================= */
-
-.view {
-  display: none;
-}
-
-.view.is-active {
-  display: block;
-}
-
-.title-adicionar{
-    color: #f7ad19;
-    font-size: 1.2rem;
-    font-weight: 600;
-    margin-bottom: 10px;
-}
-
