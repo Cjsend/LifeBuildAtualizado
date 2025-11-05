@@ -32,7 +32,7 @@
             <button class="btn ghost" id="btnQuickAdd" aria-haspopup="dialog">+ Nova rotina</button>
             <div class="profile" id="profileMenu" aria-haspopup="menu">
               <a class="avatar" href="#" aria-label="Abrir menu do usuário" id="btnOpenConfig">
-                <img src="img/sub.jpg" alt="Avatar do usuário" />
+                <img src="img/Ryo.jpg" alt="Avatar do usuário" />
               </a>
             </div>
           </nav>
@@ -140,7 +140,7 @@
                 <section class="profile-header">
                   <div class="profile-banner"></div>
                   <h1>Meu perfil</h1>
-                  <img src="img/sub.jpg" alt="Foto do perfil" class="profile-photo" />
+                  <img src="img/Ryo.jpg" alt="Foto do perfil" class="profile-photo" />
                   <input type="file" id="profilePhotoInput" accept="image/*" style="display:none;" />
                   <div class="profile-info">
                     <button class="btn edit-profile" id="btnEditProfile">Editar perfil de usuário</button>
@@ -362,25 +362,120 @@
       </div>
     </aside>
 
-    <dialog class="modal" id="modalQuickAdd" aria-labelledby="modalQuickAddTitle" aria-modal="true">
-      <form method="dialog" class="modal-content" id="quickAddForm">
+    <!-- Modal para período personalizado -->
+    <dialog class="modal" id="modalCustomPeriod" aria-labelledby="modalCustomPeriodTitle" aria-modal="true">
+      <form method="dialog" class="modal-content" id="customPeriodForm">
         <header class="modal-header">
-          <h2 id="modalQuickAddTitle">Adicionar rotina</h2>
+          <h2 id="modalCustomPeriodTitle">Adicionar rotina com período personalizado</h2>
           <button class="btn icon only" value="cancel" aria-label="Fechar">✕</button>
         </header>
         <div class="modal-body">
           <label class="field">
             <span>Título</span>
-            <input type="text" id="quickTitle" placeholder="Ex.: Treino de manhã" required />
+            <input type="text" id="customTitle" placeholder="Ex.: Curso de programação" required />
           </label>
+          <label class="field">
+            <span>Descrição</span>
+            <textarea id="customDesc" rows="3" placeholder="Detalhes da rotina..."></textarea>
+          </label>
+          
+          <div class="field">
+            <span>Tipo de período</span>
+            <div class="period-type-selector">
+              <label class="period-type-option">
+                <input type="radio" name="periodType" value="range" checked />
+                <span>Período (início e fim)</span>
+              </label>
+              <label class="period-type-option">
+                <input type="radio" name="periodType" value="specific" />
+                <span>Dias específicos</span>
+              </label>
+              <label class="period-type-option">
+                <input type="radio" name="periodType" value="recurring" />
+                <span>Recorrente (semanal/mensal)</span>
+              </label>
+            </div>
+          </div>
+          
+          <!-- Período por intervalo -->
+          <div class="period-section" id="periodRangeSection">
+            <div class="grid two">
+              <label class="field">
+                <span>Data de início</span>
+                <input type="date" id="customStartDate" required />
+              </label>
+              <label class="field">
+                <span>Data de término</span>
+                <input type="date" id="customEndDate" required />
+              </label>
+            </div>
+            <div class="field">
+              <span>Repetir nos dias da semana</span>
+              <div class="weekday-selector">
+                <label class="weekday-option"><input type="checkbox" value="0" /> Dom</label>
+                <label class="weekday-option"><input type="checkbox" value="1" checked /> Seg</label>
+                <label class="weekday-option"><input type="checkbox" value="2" checked /> Ter</label>
+                <label class="weekday-option"><input type="checkbox" value="3" checked /> Qua</label>
+                <label class="weekday-option"><input type="checkbox" value="4" checked /> Qui</label>
+                <label class="weekday-option"><input type="checkbox" value="5" checked /> Sex</label>
+                <label class="weekday-option"><input type="checkbox" value="6" /> Sáb</label>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Dias específicos -->
+          <div class="period-section" id="periodSpecificSection" style="display:none;">
+            <label class="field">
+              <span>Selecionar datas</span>
+              <div id="specificDatesContainer">
+                <div class="date-input-row">
+                  <input type="date" class="specific-date" />
+                  <button type="button" class="btn icon only remove-date" aria-label="Remover data">✕</button>
+                </div>
+              </div>
+              <button type="button" class="btn small ghost" id="addDateBtn">+ Adicionar data</button>
+            </label>
+          </div>
+          
+          <!-- Recorrência -->
+          <div class="period-section" id="periodRecurringSection" style="display:none;">
+            <div class="grid two">
+              <label class="field">
+                <span>Início</span>
+                <input type="date" id="recurringStartDate" />
+              </label>
+              <label class="field">
+                <span>Frequência</span>
+                <select id="recurringFrequency">
+                  <option value="daily">Diária</option>
+                  <option value="weekly" selected>Semanal</option>
+                  <option value="monthly">Mensal</option>
+                </select>
+              </label>
+            </div>
+            <div class="field" id="recurringIntervalField">
+              <span>Repetir a cada</span>
+              <input type="number" id="recurringInterval" min="1" value="1" />
+              <span id="intervalUnit">semana(s)</span>
+            </div>
+            <div class="field" id="recurringEndOptions">
+              <span>Terminar</span>
+              <div>
+                <label><input type="radio" name="recurringEnd" value="never" checked /> Nunca</label>
+                <label><input type="radio" name="recurringEnd" value="after" /> Após <input type="number" id="recurringOccurrences" min="1" value="10" disabled /> ocorrências</label>
+                <label><input type="radio" name="recurringEnd" value="on" /> Em <input type="date" id="recurringEndDate" disabled /></label>
+              </div>
+            </div>
+          </div>
+          
           <div class="grid two">
             <label class="field">
-              <span>Data</span>
-              <input type="date" id="quickDate" />
+              <span>Hora (opcional)</span>
+              <input type="time" id="customTime" />
             </label>
             <label class="field">
               <span>Prioridade</span>
-              <select id="quickPriority">
+              <select id="customPriority">
                 <option value="low">Baixa</option>
                 <option value="medium" selected>Média</option>
                 <option value="high">Alta</option>
@@ -389,12 +484,12 @@
           </div>
           <label class="field">
             <span>Etiqueta</span>
-            <input type="text" id="quickTag" placeholder="#pessoal" />
+            <input type="text" id="customTag" placeholder="#pessoal" />
           </label>
         </div>
         <footer class="modal-footer">
           <button class="btn ghost" value="cancel">Cancelar</button>
-          <button class="btn" value="confirm">Adicionar</button>
+          <button class="btn" value="confirm">Criar rotina</button>
         </footer>
       </form>
     </dialog>
