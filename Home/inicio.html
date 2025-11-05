@@ -8,7 +8,6 @@
   <link rel="stylesheet" href="style.css" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  
 </head>
 <body>
   <div class="app" data-layout="with-sidebar" data-theme="light">
@@ -20,7 +19,7 @@
 
           <a href="#" class="brand" aria-label="Página inicial">
             <span class="brand-mark" aria-hidden="true">✔</span>
-            <span class="brand-name">Life Build</span>
+            <span class="brand-name">Life build</span>
           </a>
 
           <div class="spacer"></div>
@@ -32,16 +31,12 @@
           <nav class="top-actions" aria-label="Ações rápidas">
             <button class="btn ghost" id="btnQuickAdd" aria-haspopup="dialog">+ Nova rotina</button>
             <div class="profile" id="profileMenu" aria-haspopup="menu">
-              <button class="avatar" aria-label="Abrir menu do usuário">
-                <a class="avatar" href="Config.html" aria-label="Abrir menu do usuário">
-                  <img src="Img/Ryo.jpg" alt="Avatar do usuário" />
-                </a>
-              </button>
+              <a class="avatar" href="#" aria-label="Abrir menu do usuário" id="btnOpenConfig">
+                <img src="img/Ryo.jpg" alt="Avatar do usuário" />
+              </a>
             </div>
           </nav>
       </header>
-  
-
 
     <div class="layout">
       <aside class="sidebar" id="sidebar" aria-label="Menu principal">
@@ -51,6 +46,7 @@
             <li><a class="menu-link is-active" href="#viewHoje" data-view="hoje">Hoje</a></li>
             <li><a class="menu-link" href="#viewTodasRotinas" data-view="todasRotinas">Todas as Rotinas</a></li>
             <li><a class="menu-link" href="#viewCalendario" data-view="calendario">Calendário</a></li>
+            <li><a class="menu-link" href="#viewGraficos" data-view="graficos">Gráficos</a></li>
           </ul>
         </section>
 
@@ -62,7 +58,7 @@
             <li><a class="tag" href="#" data-tag="saude">#saúde</a></li>
             <li><a class="tag" href="#" data-tag="estudos">#estudos</a></li>
           </ul>
-          <button class="btn small" id="btnAddTag">+ Nova Etiqueta</button>
+          <button class="btn small" id="btnAddTag">+ Nova etiqueta</button>
         </section>
 
         <section class="section">
@@ -71,7 +67,15 @@
             <li><a class="menu-link" href="#" data-filter="pendentes">Pendentes</a></li>
             <li><a class="menu-link" href="#" data-filter="concluidas">Concluídas</a></li>
             <li><a class="menu-link" href="#" data-filter="alta">Prioridade alta</a></li>
+            <li><a class="menu-link" href="#" data-filter="media">Prioridade média</a></li>
+            <li><a class="menu-link" href="#" data-filter="baixa">Prioridade baixa</a></li>
             <li><a class="menu-link" href="#" data-filter="semData">Sem data</a></li>
+          </ul>
+        </section>
+
+        <section class="section">
+          <ul class="menu" role="list">
+            <li><a class="menu-link" href="#viewConfig" data-view="config">Configurações</a></li>
           </ul>
         </section>
       </aside>
@@ -79,18 +83,17 @@
       <main class="content">
         <header class="content-header">
           <h1 class="view-title" id="viewTitle">Hoje</h1>
-          <div class="view-actions">
-             </div>
+          <div class="view-actions"></div>
         </header>
 
-        <section class="view is-active" id="viewLista" data-viewmode="lista" aria-labelledby="viewTitle">
+        <!-- Views principais -->
+        <section class="view is-active" id="viewHoje" data-viewmode="lista" aria-labelledby="viewTitle">
           <ul class="task-list" id="taskListToday" role="list"></ul>
         </section>
 
-        <section class="view" id="viewHoje">
+        <section class="view" id="viewTodasRotinas" data-viewmode="lista" aria-labelledby="viewTitle">
           <ul class="task-list" role="list"></ul>
         </section>
-
 
         <section class="view" id="viewQuadro" data-viewmode="quadro" aria-labelledby="viewTitle">
           <div class="board" role="region" aria-label="Quadro de tarefas">
@@ -130,6 +133,182 @@
           <div class="calendar-grid"></div>
         </section>
 
+        <!-- View de Configurações -->
+        <section class="view" id="viewConfig" data-viewmode="config" aria-labelledby="viewTitle">
+          <div class="config-body">
+            <main class="profile-container">
+                <section class="profile-header">
+                  <div class="profile-banner"></div>
+                  <h1>Meu perfil</h1>
+                  <img src="img/Ryo.jpg" alt="Foto do perfil" class="profile-photo" />
+                  <input type="file" id="profilePhotoInput" accept="image/*" style="display:none;" />
+                  <div class="profile-info">
+                    <button class="btn edit-profile" id="btnEditProfile">Editar perfil de usuário</button>
+                  </div>
+                </section>
+
+                <section class="account-info">
+                  <div class="info-item">
+                    <label>Nome exibido</label>
+                    <div class="info-field">
+                      <span id="displayName">Carlos</span>
+                      <button class="edit-btn" data-edit="displayName">Editar</button>
+                    </div>
+                  </div>
+
+                  <div class="info-item">
+                    <label>Nome de usuário</label>
+                    <div class="info-field">
+                      <span id="userName">onror</span>
+                      <button class="edit-btn" data-edit="userName">Editar</button>
+                    </div>
+                  </div>
+
+                  <div class="info-item">
+                    <label>E-mail</label>
+                    <div class="info-field">
+                      <span id="userEmail">*****************@gmail.com</span>
+                      <a href="#" class="link" id="showEmail">Mostrar</a>
+                    </div>
+                  </div>
+                </section>
+            </main>
+
+            <h1 class="config-title">Configuração</h1>
+            <div class="config-option">
+              <label>Ativar notificações do navegador
+                <span style="float:right;">
+                  <label class="switch">
+                    <input type="checkbox" id="notificationsToggle">
+                    <span class="slider"></span>
+                  </label>
+                </span>
+              </label>
+            </div>
+
+            <div class="config-option">
+              <label>Modo escuro
+                <span style="float:right;">
+                  <label class="switch">
+                    <input type="checkbox" id="themeToggle">
+                    <span class="slider"></span>
+                  </label>
+                </span>
+              </label>
+            </div>
+
+            <div class="config-option">
+              <label for="appLanguage">Idioma do aplicativo
+                <span style="float:right;">
+                  <select id="appLanguage">
+                    <option value="pt-BR">Português</option>
+                    <option value="en-US">Inglês</option>
+                  </select>
+                </span>
+              </label>
+            </div>
+
+            <div class="config-option">
+              <label for="fontFamily">Fonte personalizada
+                <span style="float:right;">
+                  <select id="fontFamily">
+                    <option value="Inter">Inter</option>
+                    <option value="Arial">Arial</option>
+                    <option value="Roboto">Roboto</option>
+                    <option value="Georgia">Georgia</option>
+                    <option value="Courier New">Courier New</option>
+                  </select>
+                </span>
+              </label>
+            </div>
+
+            <div class="config-option">
+              <label for="fontSize">Tamanho da fonte
+                <span style="float:right;">
+                  <input type="range" id="fontSize" min="12" max="24" value="16" />
+                  <span id="fontSizeValue">16px</span>
+                </span>
+              </label>
+            </div>
+
+            <div class="form-actions">
+              <button class="btn primary" id="btnSaveSettings">Salvar Configurações</button>
+              <button class="btn secondary" id="btnResetSettings">Restaurar Padrões</button>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <div class="view" id="viewGraficos" data-viewmode="graficos" aria-labelledby="viewTitle">
+            <canvas id="tasksChart" aria-label="Gráfico de tarefas concluídas por dia" role="img"></canvas>
+            <div class="container">
+                <header>
+                    <h1>Gráficos para Site de Rotinas</h1>
+                    <p class="subtitle">Visualizações funcionais e atrativas para acompanhar seus hábitos e progresso</p>
+                </header>
+                
+                <div class="charts-grid">
+                    <!-- Gráfico de Barras - Progresso Semanal -->
+                    <div class="chart-container">
+                        <h2 class="chart-title">📊 Progresso Semanal de Tarefas</h2>
+                        <div class="chart-wrapper">
+                            <canvas id="weeklyProgressChart"></canvas>
+                        </div>
+                        <p class="info-text">Acompanhe sua produtividade ao longo da semana</p>
+                    </div>
+                    
+                    <!-- Gráfico de Pizza - Distribuição de Tempo -->
+                    <div class="chart-container">
+                        <h2 class="chart-title">⏰ Distribuição do Tempo</h2>
+                        <div class="chart-wrapper">
+                            <canvas id="timeDistributionChart"></canvas>
+                        </div>
+                        <p class="info-text">Veja como você distribui seu tempo entre diferentes atividades</p>
+                    </div>
+                    
+                    <!-- Gráfico de Linha - Hábitos ao Longo do Tempo -->
+                    <div class="chart-container">
+                        <h2 class="chart-title">📈 Evolução de Hábitos</h2>
+                        <div class="chart-wrapper">
+                            <canvas id="habitsOverTimeChart"></canvas>
+                        </div>
+                        <p class="info-text">Monitore a consistência dos seus hábitos ao longo do tempo</p>
+                    </div>
+                    
+                    <!-- Gráfico de Radar - Equilíbrio de Vida -->
+                    <div class="chart-container">
+                        <h2 class="chart-title">🎯 Equilíbrio de Vida</h2>
+                        <div class="chart-wrapper">
+                            <canvas id="lifeBalanceChart"></canvas>
+                        </div>
+                        <p class="info-text">Avalie o equilíbrio entre diferentes áreas da sua vida</p>
+                    </div>
+                    
+                    <!-- Gráfico de Barras Horizontais - Metas Mensais -->
+                    <div class="chart-container">
+                        <h2 class="chart-title">🎯 Progresso de Metas Mensais</h2>
+                        <div class="chart-wrapper">
+                            <canvas id="monthlyGoalsChart"></canvas>
+                        </div>
+                        <p class="info-text">Acompanhe seu progresso em direção às metas do mês</p>
+                    </div>
+                    
+                    <!-- Gráfico de Área - Produtividade Diária -->
+                    <div class="chart-container">
+                        <h2 class="chart-title">📅 Produtividade Diária</h2>
+                        <div class="chart-wrapper">
+                            <canvas id="dailyProductivityChart"></canvas>
+                        </div>
+                        <p class="info-text">Visualize seus picos de produtividade ao longo do dia</p>
+                    </div>
+                </div>
+                
+                <footer>
+                    <p>Gráficos funcionais para sites de rotinas - Use para acompanhar hábitos, produtividade e metas</p>
+                </footer>
+            </div>
+          </div>
+        </section>
       </main>
     </div>
 
@@ -170,8 +349,7 @@
             <label class="field">
               <span>Etiqueta</span>
               <input type="text" id="taskTag" list="datalistTags" placeholder="#pessoal, #trabalho" />
-              <datalist id="datalistTags">
-                </datalist>
+              <datalist id="datalistTags"></datalist>
             </label>
           </div>
           <div class="actions">
@@ -184,39 +362,134 @@
       </div>
     </aside>
 
-    <dialog class="modal" id="modalQuickAdd" aria-labelledby="modalQuickAddTitle" aria-modal="true">
-      <form method="dialog" class="modal-content" id="quickAddForm">
+    <!-- Modal para período personalizado -->
+    <dialog class="modal" id="modalCustomPeriod" aria-labelledby="modalCustomPeriodTitle" aria-modal="true">
+      <form method="dialog" class="modal-content" id="customPeriodForm">
         <header class="modal-header">
-          <h2 class="title-adicionar "id="modalQuickAddTitle">Adicionar rotina</h2>
+          <h2 id="modalCustomPeriodTitle">Adicionar rotina com período personalizado</h2>
           <button class="btn icon only" value="cancel" aria-label="Fechar">✕</button>
         </header>
         <div class="modal-body">
           <label class="field">
             <span>Título</span>
-            <input type="text" id="quickTitle" placeholder="Ex.: Treino de manhã" required />
+            <input type="text" id="customTitle" placeholder="Ex.: Curso de programação" required />
           </label>
+          <label class="field">
+            <span>Descrição</span>
+            <textarea id="customDesc" rows="3" placeholder="Detalhes da rotina..."></textarea>
+          </label>
+          
+          <div class="field">
+            <span>Tipo de período</span>
+            <div class="period-type-selector">
+              <label class="period-type-option">
+                <input type="radio" name="periodType" value="range" checked />
+                <span>Período (início e fim)</span>
+              </label>
+              <label class="period-type-option">
+                <input type="radio" name="periodType" value="specific" />
+                <span>Dias específicos</span>
+              </label>
+              <label class="period-type-option">
+                <input type="radio" name="periodType" value="recurring" />
+                <span>Recorrente (semanal/mensal)</span>
+              </label>
+            </div>
+          </div>
+          
+          <!-- Período por intervalo -->
+          <div class="period-section" id="periodRangeSection">
+            <div class="grid two">
+              <label class="field">
+                <span>Data de início</span>
+                <input type="date" id="customStartDate" required />
+              </label>
+              <label class="field">
+                <span>Data de término</span>
+                <input type="date" id="customEndDate" required />
+              </label>
+            </div>
+            <div class="field">
+              <span>Repetir nos dias da semana</span>
+              <div class="weekday-selector">
+                <label class="weekday-option"><input type="checkbox" value="0" /> Dom</label>
+                <label class="weekday-option"><input type="checkbox" value="1" checked /> Seg</label>
+                <label class="weekday-option"><input type="checkbox" value="2" checked /> Ter</label>
+                <label class="weekday-option"><input type="checkbox" value="3" checked /> Qua</label>
+                <label class="weekday-option"><input type="checkbox" value="4" checked /> Qui</label>
+                <label class="weekday-option"><input type="checkbox" value="5" checked /> Sex</label>
+                <label class="weekday-option"><input type="checkbox" value="6" /> Sáb</label>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Dias específicos -->
+          <div class="period-section" id="periodSpecificSection" style="display:none;">
+            <label class="field">
+              <span>Selecionar datas</span>
+              <div id="specificDatesContainer">
+                <div class="date-input-row">
+                  <input type="date" class="specific-date" />
+                  <button type="button" class="btn icon only remove-date" aria-label="Remover data">✕</button>
+                </div>
+              </div>
+              <button type="button" class="btn small ghost" id="addDateBtn">+ Adicionar data</button>
+            </label>
+          </div>
+          
+          <!-- Recorrência -->
+          <div class="period-section" id="periodRecurringSection" style="display:none;">
+            <div class="grid two">
+              <label class="field">
+                <span>Início</span>
+                <input type="date" id="recurringStartDate" />
+              </label>
+              <label class="field">
+                <span>Frequência</span>
+                <select id="recurringFrequency">
+                  <option value="daily">Diária</option>
+                  <option value="weekly" selected>Semanal</option>
+                  <option value="monthly">Mensal</option>
+                </select>
+              </label>
+            </div>
+            <div class="field" id="recurringIntervalField">
+              <span>Repetir a cada</span>
+              <input type="number" id="recurringInterval" min="1" value="1" />
+              <span id="intervalUnit">semana(s)</span>
+            </div>
+            <div class="field" id="recurringEndOptions">
+              <span>Terminar</span>
+              <div>
+                <label><input type="radio" name="recurringEnd" value="never" checked /> Nunca</label>
+                <label><input type="radio" name="recurringEnd" value="after" /> Após <input type="number" id="recurringOccurrences" min="1" value="10" disabled /> ocorrências</label>
+                <label><input type="radio" name="recurringEnd" value="on" /> Em <input type="date" id="recurringEndDate" disabled /></label>
+              </div>
+            </div>
+          </div>
+          
           <div class="grid two">
             <label class="field">
-              <span>Data</span>
-              <input type="date" id="quickDate" />
+              <span>Hora (opcional)</span>
+              <input type="time" id="customTime" />
             </label>
             <label class="field">
               <span>Prioridade</span>
-              <select id="quickPriority">
-                <option class="low" value="low">Baixa</option>
-                <option class="medium"value="medium" selected>Média</option>
-                <option class="high"value="high">Alta</option>
+              <select id="customPriority">
+                <option value="low">Baixa</option>
+                <option value="medium" selected>Média</option>
+                <option value="high">Alta</option>
               </select>
             </label>
           </div>
           <label class="field">
             <span>Etiqueta</span>
-            <input type="text" id="quickTag" placeholder="#pessoal" />
+            <input type="text" id="customTag" placeholder="#pessoal" />
           </label>
         </div>
         <footer class="modal-footer">
           <button class="btn ghost" value="cancel">Cancelar</button>
-          <button class="btn" value="confirm">Adicionar</button>
+          <button class="btn" value="confirm">Criar rotina</button>
         </footer>
       </form>
     </dialog>
@@ -244,7 +517,6 @@
       </form>
     </dialog>
 
-    
     <div class="toasts" id="toasts" aria-live="polite" aria-atomic="true"></div>
 
     <footer class="footer" role="contentinfo">
@@ -295,7 +567,6 @@
     </div>
   </template>
 
-
-    <script defer src="script.js"></script>
-  </body>
+  <script defer src="script.js"></script>
+</body>
 </html>
