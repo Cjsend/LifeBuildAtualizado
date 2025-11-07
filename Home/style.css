@@ -36,21 +36,10 @@
     --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
     --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
                  0 2px 4px -1px rgba(0, 0, 0, 0.06);
-
-
-    .calendar-day.today {
-    background-color: #ffffff;
-    }
-
-    .task-title {
-    font-weight: 600;
-    font-size: 1rem;
-    margin-bottom: 4px;
-    color: #000000;
-    }
-
+                 
 
 }
+
 /* =======================
    🌙 DARK MODE
    ======================= */
@@ -79,15 +68,8 @@
 
     .calendar-day.today {
     background-color: #111827;
-        }
-
-    .task-title {
-    font-weight: 600;
-    font-size: 1rem;
-    margin-bottom: 4px;
-    color: #d1d5db;
-    }
-
+    color: white;
+  } 
 }
 
 /* Base Reset e Tipografia */
@@ -424,6 +406,122 @@ textarea {
 }
 
 /* =================================================================
+   ESTILOS PARA PERÍODO PERSONALIZADO
+   ================================================================= */
+
+.period-type-selector {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.period-type-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid var(--color-border);
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.period-type-option:hover {
+  background-color: var(--color-sidebar-bg);
+}
+
+.period-type-option input[type="radio"]:checked + span {
+  font-weight: 600;
+  color: var(--color-primary);
+}
+
+.period-section {
+  margin-top: 16px;
+  padding: 12px;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  background-color: var(--color-sidebar-bg);
+}
+
+.weekday-selector {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.weekday-option {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  border: 1px solid var(--color-border);
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.weekday-option:hover {
+  background-color: var(--color-primary);
+  color: white;
+}
+
+.weekday-option input[type="checkbox"]:checked + span {
+  font-weight: 600;
+  color: var(--color-primary);
+}
+
+.date-input-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+  align-items: center;
+}
+
+.date-input-row input {
+  flex-grow: 1;
+}
+
+.remove-date {
+  background-color: var(--color-danger);
+  color: white;
+}
+
+#recurringIntervalField {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+#recurringIntervalField input {
+  width: 60px;
+}
+
+#recurringEndOptions label {
+  display: block;
+  margin-bottom: 8px;
+}
+
+#recurringEndOptions input[type="number"],
+#recurringEndOptions input[type="date"] {
+  margin-left: 8px;
+  padding: 4px;
+}
+
+/* Indicador visual para rotinas com múltiplas datas */
+.task.has-multiple-dates::after {
+  content: "📅";
+  margin-left: 8px;
+  font-size: 0.8rem;
+}
+
+.calendar-event.has-multiple-dates::after {
+  content: " 📅";
+  font-size: 0.7rem;
+}
+
+/* =================================================================
    PAINEL DE DETALHES (ASIDE.DETAILS)
    ================================================================= */
 .details {
@@ -519,6 +617,41 @@ textarea {
   border: 4px solid var(--color-bg);
   margin-top: -50px;
   object-fit: cover;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  position: relative;
+}
+
+.profile-photo:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Indicador visual de que a foto é editável */
+.profile-header {
+  position: relative;
+}
+
+.profile-photo::after {
+  content: '📷';
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  background: var(--color-primary);
+  color: white;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.profile-photo:hover::after {
+  opacity: 1;
 }
 
 .profile-info {
@@ -650,6 +783,17 @@ input:checked + .slider:before {
   border: 1px solid var(--color-primary);
 }
 
+.btn.edit-profile {
+  background-color: transparent;
+  color: var(--color-primary);
+  border: 1px solid var(--color-primary);
+}
+
+.btn.edit-profile:hover {
+  background-color: var(--color-primary);
+  color: white;
+}
+
 .empty-state {
   text-align: center;
   padding: 40px 20px;
@@ -715,7 +859,7 @@ input:checked + .slider:before {
     font-weight: 600;
     font-size: 1rem;
     margin-bottom: 4px;
-    color: #d1d5db;
+    color: var(--color-text-default);
 }
 
 .task-meta {
@@ -874,6 +1018,19 @@ input:checked + .slider:before {
     padding: 4px;
 }
 
+/* =================================================================
+   CALENDÁRIO - CORREÇÃO COMPLETA
+   ================================================================= */
+
+.calendar-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin-bottom: 20px;
+    padding: 0 8px;
+}
+
 /* Calendário */
 .calendar-toolbar {
     display: flex;
@@ -943,10 +1100,10 @@ input:checked + .slider:before {
 }
 
 .calendar-day.today {
-    background-color: #111827;
+    background-color: #ffffff;
 }
 .calendar-day.today .calendar-day-number {
-    color: white;
+    color: #111827;
     background-color: #ff5454;
     border-radius: 12px;
 }
@@ -1033,6 +1190,12 @@ input:checked + .slider:before {
   width: 100%;
 }
 
+/* Melhorias para os gráficos */
+.chart-wrapper canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
 .info-text {
   text-align: center;
   color: var(--color-text-secondary);
@@ -1059,6 +1222,7 @@ input:checked + .slider:before {
   width: 100% !important;
   height: 100% !important;
 }
+
 /* Ajustes para modo escuro */
 .app[data-theme="dark"] .chart-container {
   background-color: var(--color-sidebar-bg);
@@ -1263,5 +1427,29 @@ input:checked + .slider:before {
     gap: 12px;
     align-items: flex-start;
   }
-}
 
+  /* Calendário Mobile */
+  .calendar-grid {
+    grid-template-columns: repeat(7, 1fr);
+    gap: 0;
+  }
+
+  .calendar-day {
+    min-height: 80px;
+    padding: 4px;
+  }
+
+  .calendar-day-header {
+    padding: 8px 4px;
+    font-size: 0.75rem;
+  }
+
+  .calendar-day-number {
+    font-size: 0.75rem;
+  }
+
+  .calendar-event {
+    font-size: 0.7rem;
+    padding: 1px 2px;
+  }
+}
