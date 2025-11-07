@@ -1,9 +1,3 @@
-/* =================================================================================
-   script.js
-   Versão: Comentada linha a linha (didática)
-   Finalidade: Aplicativo de Rotinas (Lista / Quadro Kanban / Calendário)
-   Nota: este arquivo assume que o HTML tem os IDs / templates apresentados anteriormente.
-   ================================================================================= */
 
 /* ===========================
    1) CONSTANTES E CONFIGURAÇÕES
@@ -127,6 +121,7 @@ const DOM = {
   viewQuadro: document.getElementById('viewQuadro'),
   viewCalendario: document.getElementById('viewCalendario'),
   viewConfig: document.getElementById('viewConfig'),
+  viewGraficos: document.getElementById('viewGraficos'),
   taskListToday: document.getElementById('taskListToday'),
   todoList: document.querySelector('[data-col="todo"] .card-list'),
   doingList: document.querySelector('[data-col="doing"] .card-list'),
@@ -143,21 +138,6 @@ const DOM = {
   btnSaveTask: document.getElementById('btnSaveTask'),
   btnDeleteTask: document.getElementById('btnDeleteTask'),
   btnDuplicateTask: document.getElementById('btnDuplicateTask'),
-  modalQuickAdd: document.getElementById('modalQuickAdd'),
-  quickAddForm: document.getElementById('quickAddForm'),
-  quickTitle: document.getElementById('quickTitle'),
-  quickDate: document.getElementById('quickDate'),
-  quickPriority: document.getElementById('quickPriority'),
-  quickTag: document.getElementById('quickTag'),
-  modalAddTag: document.getElementById('modalAddTag'),
-  addTagForm: document.getElementById('addTagForm'),
-  tagName: document.getElementById('tagName'),
-  tagColor: document.getElementById('tagColor'),
-  calPrev: document.getElementById('calPrev'),
-  calNext: document.getElementById('calNext'),
-  calToday: document.getElementById('calToday'),
-  calTitle: document.getElementById('calTitle'),
-  calendarGrid: document.querySelector('.calendar-grid'),
   toastsContainer: document.getElementById('toasts'),
   // Configurações
   btnOpenConfig: document.getElementById('btnOpenConfig'),
@@ -173,7 +153,35 @@ const DOM = {
   displayName: document.getElementById('displayName'),
   userName: document.getElementById('userName'),
   userEmail: document.getElementById('userEmail'),
-  showEmail: document.getElementById('showEmail')
+  showEmail: document.getElementById('showEmail'),
+  // Calendário - CORREÇÃO ADICIONADA
+  calTitle: document.getElementById('calTitle'),
+  calendarGrid: document.querySelector('.calendar-grid'),
+  calPrev: document.getElementById('calPrev'),
+  calNext: document.getElementById('calNext'),
+  // Período personalizado
+  modalCustomPeriod: document.getElementById('modalCustomPeriod'),
+  customPeriodForm: document.getElementById('customPeriodForm'),
+  customTitle: document.getElementById('customTitle'),
+  customDesc: document.getElementById('customDesc'),
+  customStartDate: document.getElementById('customStartDate'),
+  customEndDate: document.getElementById('customEndDate'),
+  customTime: document.getElementById('customTime'),
+  customPriority: document.getElementById('customPriority'),
+  customTag: document.getElementById('customTag'),
+  periodTypeRadios: document.querySelectorAll('input[name="periodType"]'),
+  periodRangeSection: document.getElementById('periodRangeSection'),
+  periodSpecificSection: document.getElementById('periodSpecificSection'),
+  periodRecurringSection: document.getElementById('periodRecurringSection'),
+  addDateBtn: document.getElementById('addDateBtn'),
+  specificDatesContainer: document.getElementById('specificDatesContainer'),
+  recurringFrequency: document.getElementById('recurringFrequency'),
+  recurringInterval: document.getElementById('recurringInterval'),
+  intervalUnit: document.getElementById('intervalUnit'),
+  recurringEndRadios: document.querySelectorAll('input[name="recurringEnd"]'),
+  recurringOccurrences: document.getElementById('recurringOccurrences'),
+  recurringEndDate: document.getElementById('recurringEndDate'),
+  recurringStartDate: document.getElementById('recurringStartDate')
 };
 
 // Templates <template> do HTML (clonamos estes quando precisamos criar elementos)
@@ -213,18 +221,13 @@ function init() {
   // Carrega configurações
   loadSettings();
 
+  // Inicializar gráficos se estiver na view de gráficos
+  if (state.currentView === 'graficos') {
+    setTimeout(initCharts, 100); // Pequeno delay para garantir que o DOM esteja pronto
+  }
+
   // Renderiza a interface inicial de acordo com a view selecionada
   render();
-  // Inicializar gráficos se a view for 'todasRotinas' (case-insensitive)
-  try {
-    if (String(state.currentView).toLowerCase() === 'todasrotinas') {
-      // chama initCharts com pequeno delay para garantir que o DOM da view esteja visível
-      setTimeout(initCharts, 100);
-    }
-  } catch (err) {
-    // se initCharts não existir ou der erro, não interrompe a navegação
-    console.warn('initCharts não pôde ser chamado:', err);
-  }
 }
 
 /* ===========================
@@ -281,6 +284,11 @@ function saveData() {
       showSidebar: state.showSidebar
     };
     localStorage.setItem(STORAGE_KEY, JSON.stringify(dataToSave));
+    
+    // Se estiver na view de gráficos, atualizar os gráficos
+    if (state.currentView === 'graficos') {
+      initCharts();
+    }
   } catch (err) {
     console.error('Erro ao salvar dados no storage:', err);
   }
@@ -664,7 +672,8 @@ function updateViewTitle() {
     'hoje': 'Hoje',
     'todasRotinas': 'Todas as Rotinas',
     'calendario': 'Calendário',
-    'config': 'Configurações'
+    'config': 'Configurações',
+    'graficos': 'Gráficos'
   };
   if (DOM.viewTitle) DOM.viewTitle.textContent = titles[state.currentView] || 'Rotinas';
 }
@@ -745,6 +754,10 @@ function render() {
       if (DOM.viewConfig) DOM.viewConfig.classList.add('is-active');
       renderProfile();
       break;
+    case 'graficos':
+      if (DOM.viewGraficos) DOM.viewGraficos.classList.add('is-active');
+      initCharts(); // ← INICIALIZAR GRÁFICOS AQUI
+      break;
     default:
       if (DOM.viewHoje) DOM.viewHoje.classList.add('is-active');
       renderTaskList();
@@ -783,7 +796,7 @@ function renderBoard() {
 }
 
 /* ---------------------------
-   10.2) Render - Calendário
+   10.2) Render - Calendário - CORREÇÃO COMPLETA
    --------------------------- */
 
 // Renderiza o calendário do mês atual (state.currentDate)
@@ -797,7 +810,7 @@ function renderCalendar() {
   const year = state.currentDate.getFullYear();
   const month = state.currentDate.getMonth();
 
-  // Nome do mês (em PT-BR, você pode trocar se quiser)
+  // Nome do mês (em PT-BR)
   const monthNames = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
   DOM.calTitle.textContent = `${monthNames[month]} ${year}`;
 
@@ -874,6 +887,10 @@ function createCalendarDay(day, isOtherMonth, isToday = false, fullDate = null) 
     tasksForDay.forEach(task => {
       const ev = document.createElement('button');
       ev.className = `calendar-event priority-${task.priority || 'medium'}`;
+      // Adicionar classe se a tarefa faz parte de uma rotina com múltiplas datas
+      if (task.isRecurring || task.parentRoutineId) {
+        ev.classList.add('has-multiple-dates');
+      }
       // Pode truncar o título se for muito grande (ex.: 30 chars)
       ev.textContent = task.title.length > 30 ? task.title.slice(0, 27) + '...' : task.title;
       // Ao clicar no evento, abre detalhes
@@ -884,15 +901,16 @@ function createCalendarDay(day, isOtherMonth, isToday = false, fullDate = null) 
       cell.appendChild(ev);
     });
 
-    // Ao clicar no dia (fora de eventos), abre modal de adição rápida com a data preenchida
+    // Ao clicar no dia (fora de eventos), abre modal de período personalizado com a data preenchida
     cell.addEventListener('click', (e) => {
       // Se o clique for num evento, já tratamos acima
       if (e.target && e.target.matches('.calendar-event')) return;
-      if (!DOM.modalQuickAdd || !DOM.quickDate) return;
+      if (!DOM.modalCustomPeriod) return;
       const dateStr = formatDateForInput(fullDate);
-      DOM.quickDate.value = dateStr;
-      if (DOM.modalQuickAdd.showModal) DOM.modalQuickAdd.showModal();
-      if (DOM.quickTitle) DOM.quickTitle.focus();
+      if (DOM.customStartDate) DOM.customStartDate.value = dateStr;
+      if (DOM.customEndDate) DOM.customEndDate.value = dateStr;
+      if (DOM.recurringStartDate) DOM.recurringStartDate.value = dateStr;
+      openCustomPeriodModal();
     });
   }
 
@@ -919,6 +937,10 @@ function createTaskElement(task) {
   li.dataset.taskId = task.id;
   // Adiciona classe visual se concluída
   if (task.completed) li.classList.add('is-completed');
+  // Adicionar classe se a tarefa faz parte de uma rotina com múltiplas datas
+  if (task.isRecurring || task.parentRoutineId) {
+    li.classList.add('has-multiple-dates');
+  }
 
   // Checkbox para concluir/toggle
   const checkbox = clone.querySelector('.checkbox input');
@@ -997,6 +1019,10 @@ function createBoardCard(task) {
   card.dataset.taskId = task.id;
   card.draggable = true;
   if (task.completed) card.classList.add('is-completed');
+  // Adicionar classe se a tarefa faz parte de uma rotina com múltiplas datas
+  if (task.isRecurring || task.parentRoutineId) {
+    card.classList.add('has-multiple-dates');
+  }
 
   // Título
   const title = clone.querySelector('.card-title');
@@ -1220,7 +1246,338 @@ function renderProfile() {
 }
 
 /* ===========================
-   14) EVENTOS GERAIS E LIGAÇÕES
+   14) SISTEMA DE PERÍODO PERSONALIZADO
+   =========================== */
+
+// Abrir modal de período personalizado
+function openCustomPeriodModal() {
+  if (!DOM.modalCustomPeriod) return;
+  
+  // Definir data mínima como hoje
+  const today = new Date().toISOString().split('T')[0];
+  if (DOM.customStartDate) DOM.customStartDate.min = today;
+  if (DOM.customEndDate) DOM.customEndDate.min = today;
+  if (DOM.recurringStartDate) DOM.recurringStartDate.min = today;
+  
+  // Limpar formulário
+  DOM.customPeriodForm.reset();
+  
+  // Mostrar seção padrão (intervalo)
+  showPeriodSection('range');
+  
+  // Abrir modal
+  if (DOM.modalCustomPeriod.showModal) DOM.modalCustomPeriod.showModal();
+  if (DOM.customTitle) DOM.customTitle.focus();
+}
+
+// Função para fechar o modal de período personalizado
+function closeCustomPeriodModal() {
+  if (!DOM.modalCustomPeriod) return;
+  
+  // Limpar formulário
+  if (DOM.customPeriodForm) DOM.customPeriodForm.reset();
+  
+  // Fechar modal
+  if (DOM.modalCustomPeriod.close) DOM.modalCustomPeriod.close();
+}
+
+// Mostrar seção específica baseada no tipo de período selecionado
+function showPeriodSection(type) {
+  // Esconder todas as seções
+  if (DOM.periodRangeSection) DOM.periodRangeSection.style.display = 'none';
+  if (DOM.periodSpecificSection) DOM.periodSpecificSection.style.display = 'none';
+  if (DOM.periodRecurringSection) DOM.periodRecurringSection.style.display = 'none';
+  
+  // Mostrar a seção selecionada
+  switch(type) {
+    case 'range':
+      if (DOM.periodRangeSection) DOM.periodRangeSection.style.display = 'block';
+      break;
+    case 'specific':
+      if (DOM.periodSpecificSection) DOM.periodSpecificSection.style.display = 'block';
+      break;
+    case 'recurring':
+      if (DOM.periodRecurringSection) DOM.periodRecurringSection.style.display = 'block';
+      break;
+  }
+}
+
+// Adicionar campo de data para dias específicos
+function addSpecificDateField() {
+  if (!DOM.specificDatesContainer) return;
+  
+  const dateRow = document.createElement('div');
+  dateRow.className = 'date-input-row';
+  
+  const dateInput = document.createElement('input');
+  dateInput.type = 'date';
+  dateInput.className = 'specific-date';
+  
+  const removeBtn = document.createElement('button');
+  removeBtn.type = 'button';
+  removeBtn.className = 'btn icon only remove-date';
+  removeBtn.setAttribute('aria-label', 'Remover data');
+  removeBtn.textContent = '✕';
+  
+  removeBtn.addEventListener('click', function() {
+    dateRow.remove();
+  });
+  
+  dateRow.appendChild(dateInput);
+  dateRow.appendChild(removeBtn);
+  DOM.specificDatesContainer.appendChild(dateRow);
+}
+
+// Atualizar unidade de intervalo baseada na frequência
+function updateIntervalUnit() {
+  if (!DOM.recurringFrequency || !DOM.intervalUnit) return;
+  
+  const frequency = DOM.recurringFrequency.value;
+  let unit = 'dia(s)';
+  
+  switch(frequency) {
+    case 'weekly':
+      unit = 'semana(s)';
+      break;
+    case 'monthly':
+      unit = 'mês(es)';
+      break;
+  }
+  
+  DOM.intervalUnit.textContent = unit;
+}
+
+// Habilitar/desabilitar campos de término baseado na seleção
+function toggleRecurringEndFields() {
+  const selectedValue = document.querySelector('input[name="recurringEnd"]:checked').value;
+  
+  if (DOM.recurringOccurrences) {
+    DOM.recurringOccurrences.disabled = selectedValue !== 'after';
+  }
+  
+  if (DOM.recurringEndDate) {
+    DOM.recurringEndDate.disabled = selectedValue !== 'on';
+  }
+}
+
+// Gerar todas as datas para uma rotina baseada no tipo de período
+function generateRoutineDates(periodType, formData) {
+  let dates = [];
+  
+  switch(periodType) {
+    case 'range':
+      // Gerar datas entre início e fim, considerando apenas os dias da semana selecionados
+      const start = new Date(formData.startDate);
+      const end = new Date(formData.endDate);
+      const selectedDays = formData.selectedDays || [1, 2, 3, 4, 5]; // Padrão: dias de semana
+      
+      let current = new Date(start);
+      while (current <= end) {
+        if (selectedDays.includes(current.getDay())) {
+          dates.push(formatDateForInput(current));
+        }
+        current.setDate(current.getDate() + 1);
+      }
+      break;
+      
+    case 'specific':
+      // Usar as datas específicas fornecidas
+      dates = formData.specificDates.filter(date => date.trim() !== '');
+      break;
+      
+    case 'recurring':
+      // Gerar datas baseadas na recorrência
+      dates = generateRecurringDates(formData);
+      break;
+  }
+  
+  return dates;
+}
+
+// Gerar datas para rotinas recorrentes
+function generateRecurringDates(formData) {
+  const dates = [];
+  const startDate = new Date(formData.startDate);
+  const frequency = formData.frequency;
+  const interval = parseInt(formData.interval) || 1;
+  
+  let currentDate = new Date(startDate);
+  let occurrenceCount = 0;
+  const maxOccurrences = formData.endType === 'after' ? parseInt(formData.occurrences) : Infinity;
+  const endDate = formData.endType === 'on' ? new Date(formData.endDate) : null;
+  
+  while (
+    (formData.endType === 'never' || 
+     (formData.endType === 'after' && occurrenceCount < maxOccurrences) ||
+     (formData.endType === 'on' && currentDate <= endDate))
+  ) {
+    dates.push(formatDateForInput(currentDate));
+    occurrenceCount++;
+    
+    // Avançar para a próxima data baseada na frequência
+    switch(frequency) {
+      case 'daily':
+        currentDate.setDate(currentDate.getDate() + interval);
+        break;
+      case 'weekly':
+        currentDate.setDate(currentDate.getDate() + (7 * interval));
+        break;
+      case 'monthly':
+        currentDate.setMonth(currentDate.getMonth() + interval);
+        break;
+    }
+    
+    // Limitar a um número razoável de ocorrências para evitar loops infinitos
+    if (occurrenceCount > 365) break;
+  }
+  
+  return dates;
+}
+
+// Adicionar múltiplas rotinas baseadas nas datas geradas
+function addRoutinesWithCustomPeriod(formData) {
+  const dates = generateRoutineDates(formData.periodType, formData);
+  
+  if (dates.length === 0) {
+    showToast('Nenhuma data válida foi gerada para esta rotina.', 'error');
+    return;
+  }
+  
+  let createdCount = 0;
+  
+  dates.forEach(date => {
+    const routineData = {
+      title: formData.title,
+      description: formData.description,
+      date: date,
+      time: formData.time,
+      priority: formData.priority,
+      tag: formData.tag,
+      status: 'todo',
+      completed: false,
+      isRecurring: formData.periodType === 'recurring'
+    };
+    
+    const result = addNewRoutine(routineData);
+    if (result) createdCount++;
+  });
+  
+  showToast(`${createdCount} rotina(s) criada(s) com sucesso!`, 'success');
+}
+
+// Processar formulário de período personalizado
+function processCustomPeriodForm(e) {
+  if (e && e.preventDefault) e.preventDefault();
+  
+  // Verificar se é o botão cancelar
+  const submitter = e.submitter;
+  if (submitter && submitter.value === 'cancel') {
+    closeCustomPeriodModal();
+    return;
+  }
+  
+  // Coletar dados do formulário
+  const title = DOM.customTitle ? DOM.customTitle.value.trim() : '';
+  const description = DOM.customDesc ? DOM.customDesc.value : '';
+  const time = DOM.customTime ? DOM.customTime.value || undefined : undefined;
+  const priority = DOM.customPriority ? DOM.customPriority.value : 'medium';
+  const tag = DOM.customTag ? normalizeTag(DOM.customTag.value) : undefined;
+  
+  if (!title) {
+    showToast('O título da rotina é obrigatório.', 'error');
+    return;
+  }
+  
+  // Determinar tipo de período selecionado
+  const periodType = document.querySelector('input[name="periodType"]:checked').value;
+  let formData = {
+    title,
+    description,
+    time,
+    priority,
+    tag,
+    periodType
+  };
+  
+  // Coletar dados específicos do tipo de período
+  switch(periodType) {
+    case 'range':
+      const startDate = DOM.customStartDate ? DOM.customStartDate.value : '';
+      const endDate = DOM.customEndDate ? DOM.customEndDate.value : '';
+      
+      if (!startDate || !endDate) {
+        showToast('As datas de início e término são obrigatórias.', 'error');
+        return;
+      }
+      
+      if (new Date(startDate) > new Date(endDate)) {
+        showToast('A data de início não pode ser posterior à data de término.', 'error');
+        return;
+      }
+      
+      // Coletar dias da semana selecionados
+      const selectedDays = [];
+      document.querySelectorAll('.weekday-option input[type="checkbox"]:checked').forEach(cb => {
+        selectedDays.push(parseInt(cb.value));
+      });
+      
+      formData.startDate = startDate;
+      formData.endDate = endDate;
+      formData.selectedDays = selectedDays;
+      break;
+      
+    case 'specific':
+      const specificDates = [];
+      document.querySelectorAll('.specific-date').forEach(input => {
+        if (input.value) specificDates.push(input.value);
+      });
+      
+      if (specificDates.length === 0) {
+        showToast('Pelo menos uma data específica deve ser fornecida.', 'error');
+        return;
+      }
+      
+      formData.specificDates = specificDates;
+      break;
+      
+    case 'recurring':
+      const recurringStartDate = DOM.recurringStartDate ? DOM.recurringStartDate.value : '';
+      const frequency = DOM.recurringFrequency ? DOM.recurringFrequency.value : 'weekly';
+      const interval = DOM.recurringInterval ? DOM.recurringInterval.value : '1';
+      const endType = document.querySelector('input[name="recurringEnd"]:checked').value;
+      
+      if (!recurringStartDate) {
+        showToast('A data de início é obrigatória para rotinas recorrentes.', 'error');
+        return;
+      }
+      
+      formData.startDate = recurringStartDate;
+      formData.frequency = frequency;
+      formData.interval = interval;
+      formData.endType = endType;
+      
+      if (endType === 'after') {
+        formData.occurrences = DOM.recurringOccurrences ? DOM.recurringOccurrences.value : '10';
+      } else if (endType === 'on') {
+        formData.endDate = DOM.recurringEndDate ? DOM.recurringEndDate.value : '';
+        
+        if (!formData.endDate) {
+          showToast('A data de término é obrigatória quando selecionada.', 'error');
+          return;
+        }
+      }
+      break;
+  }
+  
+  // Criar as rotinas
+  addRoutinesWithCustomPeriod(formData);
+  
+  // Fechar modal
+  closeCustomPeriodModal();
+}
+
+/* ===========================
+   15) EVENTOS GERAIS E LIGAÇÕES
    =========================== */
 
 // Configura todos os listeners de UI (botões, formulários, links, etc.)
@@ -1229,11 +1586,8 @@ function setupEventListeners() {
   if (DOM.btnToggleSidebar) DOM.btnToggleSidebar.addEventListener('click', toggleSidebar);
 
   // Botão de adicionar rápida
-  if (DOM.btnQuickAdd && DOM.modalQuickAdd) {
-    DOM.btnQuickAdd.addEventListener('click', () => {
-      if (DOM.modalQuickAdd.showModal) DOM.modalQuickAdd.showModal();
-      if (DOM.quickTitle) DOM.quickTitle.focus();
-    });
+  if (DOM.btnQuickAdd && DOM.modalCustomPeriod) {
+    DOM.btnQuickAdd.addEventListener('click', openCustomPeriodModal);
   }
 
   // Navegação principal (links com data-view)
@@ -1280,78 +1634,48 @@ function setupEventListeners() {
   if (DOM.btnDeleteTask) DOM.btnDeleteTask.addEventListener('click', deleteCurrentTask);
   if (DOM.btnDuplicateTask) DOM.btnDuplicateTask.addEventListener('click', duplicateCurrentTask);
 
-  // Quick add form (modal)
-  if (DOM.quickAddForm) {
-    DOM.quickAddForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-
-      // Pega valores
-      let dateValue = DOM.quickDate ? DOM.quickDate.value || undefined : undefined;
-      // Corrige possíveis problemas de timezone ao criar ISO
-      if (dateValue) {
-        const [y, m, d] = dateValue.split('-');
-        dateValue = new Date(y, parseInt(m,10)-1, d).toISOString().split('T')[0];
-      }
-
-      const formData = {
-        title: DOM.quickTitle ? DOM.quickTitle.value.trim() : '',
-        date: dateValue,
-        priority: DOM.quickPriority ? DOM.quickPriority.value : 'medium',
-        tag: DOM.quickTag ? normalizeTag(DOM.quickTag.value) : undefined
-      };
-
-      if (!formData.title) {
-        showToast('O título é obrigatório.', 'error');
-        return;
-      }
-
-      addNewRoutine(formData);
-      DOM.quickAddForm.reset();
-      if (DOM.modalQuickAdd.close) DOM.modalQuickAdd.close();
-    });
-
-    // Botão cancelar do modal (value="cancel")
-    const cancelBtn = DOM.quickAddForm.querySelector('button[value="cancel"]');
-    if (cancelBtn) cancelBtn.addEventListener('click', () => {
-      DOM.quickAddForm.reset();
-      if (DOM.modalQuickAdd.close) DOM.modalQuickAdd.close();
+  // Event listeners para o modal de período personalizado
+  if (DOM.periodTypeRadios) {
+    DOM.periodTypeRadios.forEach(radio => {
+      radio.addEventListener('change', function() {
+        showPeriodSection(this.value);
+      });
     });
   }
-
-  // Formulário de adicionar tag
-  if (DOM.addTagForm) {
-    DOM.addTagForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const name = DOM.tagName ? DOM.tagName.value.trim() : '';
-      const color = DOM.tagColor ? DOM.tagColor.value : '#888';
-      if (!name) {
-        showToast('O nome da etiqueta é obrigatório.', 'error');
-        return;
-      }
-      addNewTag({ name, color });
-      DOM.addTagForm.reset();
-      if (DOM.modalAddTag.close) DOM.modalAddTag.close();
-    });
-
-    // Cancelar modal de tag
-    const cancelTagBtn = DOM.addTagForm.querySelector('button[value="cancel"]');
-    if (cancelTagBtn) cancelTagBtn.addEventListener('click', () => {
-      DOM.addTagForm.reset();
-      if (DOM.modalAddTag.close) DOM.modalAddTag.close();
+  
+  if (DOM.addDateBtn) {
+    DOM.addDateBtn.addEventListener('click', addSpecificDateField);
+  }
+  
+  if (DOM.recurringFrequency) {
+    DOM.recurringFrequency.addEventListener('change', updateIntervalUnit);
+  }
+  
+  if (DOM.recurringEndRadios) {
+    DOM.recurringEndRadios.forEach(radio => {
+      radio.addEventListener('change', toggleRecurringEndFields);
     });
   }
+  
+  if (DOM.customPeriodForm) {
+    DOM.customPeriodForm.addEventListener('submit', processCustomPeriodForm);
+    
+    // Botão cancelar
+    const cancelBtn = DOM.customPeriodForm.querySelector('button[value="cancel"]');
+    if (cancelBtn) {
+      cancelBtn.addEventListener('click', () => {
+        closeCustomPeriodModal();
+      });
+    }
+  }
 
-  // Navegação do calendário (mudar mês)
+  // Navegação do calendário (mudar mês) - CORREÇÃO ADICIONADA
   if (DOM.calPrev) DOM.calPrev.addEventListener('click', () => {
     state.currentDate.setMonth(state.currentDate.getMonth() - 1);
     renderCalendar();
   });
   if (DOM.calNext) DOM.calNext.addEventListener('click', () => {
     state.currentDate.setMonth(state.currentDate.getMonth() + 1);
-    renderCalendar();
-  });
-  if (DOM.calToday) DOM.calToday.addEventListener('click', () => {
-    state.currentDate = new Date();
     renderCalendar();
   });
 
@@ -1421,7 +1745,7 @@ function setupEventListeners() {
 }
 
 /* ===========================
-   15) FUNÇÕES AUXILIARES (UI/Helpers)
+   16) FUNÇÕES AUXILIARES (UI/Helpers)
    =========================== */
 
 // Alterna a sidebar visível / escondida e persiste a preferência
@@ -1461,318 +1785,262 @@ function updateClock() {
   if (DOM.todayDate) DOM.todayDate.textContent = now.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' });
   if (DOM.nowTime) DOM.nowTime.textContent = now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
 }
+
 /* ===========================
-   16) GRÁFICOS E VISUALIZAÇÕES
+   17) SISTEMA DE GRÁFICOS - VERSÃO CORRIGIDA
    =========================== */
 
-// Referências aos gráficos
-let weeklyChart, tagDistributionChart, habitsChart;
-
-// Inicializar gráficos quando a view for carregada
+// Inicializar todos os gráficos
 function initCharts() {
-  if (state.currentView === 'todasRotinas') {
-    setTimeout(updateAllCharts, 100);
-  }
+    console.log('Inicializando gráficos...');
+    
+    if (!state.routines || state.routines.length === 0) {
+        console.log('Nenhuma rotina encontrada para gráficos');
+        renderEmptyCharts();
+        return;
+    }
+    
+    try {
+        renderWeeklyProgressChart();
+        renderTimeDistributionChart();
+        renderHabitsOverTimeChart();
+        renderLifeBalanceChart();
+        renderMonthlyGoalsChart();
+        renderDailyProductivityChart();
+        console.log('Gráficos inicializados com sucesso!');
+    } catch (error) {
+        console.error('Erro ao inicializar gráficos:', error);
+        renderEmptyCharts();
+    }
 }
 
-// Atualizar todos os gráficos
-function updateAllCharts() {
-  updateWeeklyProgressChart();
-  updateTagDistributionChart();
-  updateHabitsOverTimeChart();
-}
-
-// Gráfico de Progresso Semanal
-function updateWeeklyProgressChart() {
-  const ctx = document.getElementById('weeklyProgressChart');
-  if (!ctx) return;
-  
-  // Dados da semana atual
-  const weekData = getWeeklyProgressData();
-  
-  // Destruir gráfico anterior se existir
-  if (weeklyChart) {
-    weeklyChart.destroy();
-  }
-  
-  weeklyChart = new Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels: ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'],
-      datasets: [{
-        label: 'Tarefas Concluídas',
-        data: weekData,
-        backgroundColor: 'rgba(67, 97, 238, 0.7)',
-        borderColor: 'rgba(67, 97, 238, 1)',
-        borderWidth: 1,
-        borderRadius: 4
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      scales: {
-        y: {
-          beginAtZero: true,
-          title: {
-            display: true,
-            text: 'Tarefas Concluídas'
-          },
-          grid: {
-            color: 'rgba(0, 0, 0, 0.1)'
-          }
+// Renderizar gráfico de progresso semanal - VERSÃO SIMPLIFICADA
+function renderWeeklyProgressChart() {
+    const ctx = document.getElementById('weeklyProgressChart');
+    if (!ctx) {
+        console.log('Elemento weeklyProgressChart não encontrado');
+        return;
+    }
+    
+    // Destruir gráfico anterior se existir
+    if (ctx.chartInstance) {
+        ctx.chartInstance.destroy();
+    }
+    
+    // Dados de exemplo para teste
+    const weeklyData = [5, 8, 6, 9, 7, 4, 3];
+    
+    ctx.chartInstance = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'],
+            datasets: [{
+                label: 'Tarefas Concluídas',
+                data: weeklyData,
+                backgroundColor: '#ff5454',
+                borderColor: '#ff2c2c',
+                borderWidth: 1
+            }]
         },
-        x: {
-          grid: {
-            display: false
-          }
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
         }
-      },
-      plugins: {
-        legend: {
-          display: false
-        },
-        tooltip: {
-          backgroundColor: 'rgba(0, 0, 0, 0.8)',
-          titleColor: '#fff',
-          bodyColor: '#fff'
-        }
-      }
-    }
-  });
-}
-
-// Obter dados de progresso semanal
-function getWeeklyProgressData() {
-  const today = new Date();
-  const weekData = [0, 0, 0, 0, 0, 0, 0]; // Para cada dia da semana
-  
-  state.routines.forEach(task => {
-    if (task.completed && task.date) {
-      const taskDate = new Date(task.date + 'T00:00:00');
-      const diffTime = today - taskDate;
-      const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-      
-      // Se a tarefa foi concluída nos últimos 7 dias
-      if (diffDays >= 0 && diffDays < 7) {
-        const dayOfWeek = taskDate.getDay(); // 0 = Domingo, 1 = Segunda, etc.
-        // Ajustar para Segunda = 0, Domingo = 6
-        const adjustedDay = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
-        weekData[adjustedDay]++;
-      }
-    }
-  });
-  
-  return weekData;
-}
-
-// Gráfico de Distribuição por Etiquetas
-function updateTagDistributionChart() {
-  const ctx = document.getElementById('tagDistributionChart');
-  if (!ctx) return;
-  
-  const tagData = getTagDistributionData();
-  
-  if (tagDistributionChart) {
-    tagDistributionChart.destroy();
-  }
-  
-  tagDistributionChart = new Chart(ctx, {
-    type: 'doughnut',
-    data: {
-      labels: tagData.labels,
-      datasets: [{
-        data: tagData.data,
-        backgroundColor: tagData.colors,
-        borderColor: tagData.borderColors,
-        borderWidth: 1
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: {
-          position: 'bottom',
-          labels: {
-            padding: 15,
-            usePointStyle: true
-          }
-        }
-      },
-      cutout: '60%'
-    }
-  });
-}
-
-// Obter dados de distribuição por etiquetas
-function getTagDistributionData() {
-  const tagCounts = {};
-  
-  state.routines.forEach(task => {
-    const tag = task.tag || 'Sem etiqueta';
-    tagCounts[tag] = (tagCounts[tag] || 0) + 1;
-  });
-  
-  // Ordenar por quantidade e pegar as principais
-  const sortedTags = Object.entries(tagCounts)
-    .sort((a, b) => b[1] - a[1])
-    .slice(0, 6); // Máximo 6 etiquetas
-  
-  const labels = sortedTags.map(item => item[0]);
-  const data = sortedTags.map(item => item[1]);
-  
-  // Cores baseadas nas etiquetas padrão
-  const colorPalette = [
-    'rgba(79, 70, 229, 0.8)',   // Pessoal
-    'rgba(16, 185, 129, 0.8)',  // Trabalho
-    'rgba(239, 68, 68, 0.8)',   // Saúde
-    'rgba(245, 158, 11, 0.8)',  // Estudos
-    'rgba(139, 92, 246, 0.8)',  // Extra 1
-    'rgba(14, 165, 233, 0.8)'   // Extra 2
-  ];
-  
-  const borderColors = colorPalette.map(color => color.replace('0.8', '1'));
-  
-  return {
-    labels,
-    data,
-    colors: colorPalette.slice(0, labels.length),
-    borderColors: borderColors.slice(0, labels.length)
-  };
-}
-
-// Gráfico de Evolução de Hábitos
-function updateHabitsOverTimeChart() {
-  const ctx = document.getElementById('habitsOverTimeChart');
-  if (!ctx) return;
-  
-  const habitsData = getHabitsOverTimeData();
-  
-  if (habitsChart) {
-    habitsChart.destroy();
-  }
-  
-  habitsChart = new Chart(ctx, {
-    type: 'line',
-    data: {
-      labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
-      datasets: habitsData
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      scales: {
-        y: {
-          beginAtZero: true,
-          max: 100,
-          title: {
-            display: true,
-            text: 'Consistência (%)'
-          },
-          grid: {
-            color: 'rgba(0, 0, 0, 0.1)'
-          }
-        },
-        x: {
-          grid: {
-            color: 'rgba(0, 0, 0, 0.1)'
-          }
-        }
-      },
-      plugins: {
-        tooltip: {
-          mode: 'index',
-          intersect: false
-        }
-      },
-      interaction: {
-        mode: 'nearest',
-        axis: 'x',
-        intersect: false
-      }
-    }
-  });
-}
-
-// Obter dados de evolução de hábitos (dados simulados para demonstração)
-function getHabitsOverTimeData() {
-  // Para demonstração, vamos usar dados simulados
-  // Em uma aplicação real, você coletaria dados históricos
-  
-  const currentMonth = new Date().getMonth();
-  
-  return [
-    {
-      label: 'Exercícios Físicos',
-      data: generateSimulatedData(currentMonth, 65, 92),
-      borderColor: 'rgba(67, 97, 238, 1)',
-      backgroundColor: 'rgba(67, 97, 238, 0.1)',
-      tension: 0.3,
-      fill: true
-    },
-    {
-      label: 'Leitura',
-      data: generateSimulatedData(currentMonth, 50, 85),
-      borderColor: 'rgba(16, 185, 129, 1)',
-      backgroundColor: 'rgba(16, 185, 129, 0.1)',
-      tension: 0.3,
-      fill: true
-    },
-    {
-      label: 'Meditação',
-      data: generateSimulatedData(currentMonth, 30, 80),
-      borderColor: 'rgba(245, 158, 11, 1)',
-      backgroundColor: 'rgba(245, 158, 11, 0.1)',
-      tension: 0.3,
-      fill: true
-    }
-  ];
-}
-
-// Gerar dados simulados para demonstração
-function generateSimulatedData(currentMonth, startValue, endValue) {
-  const data = [];
-  const totalMonths = 12;
-  
-  for (let i = 0; i < totalMonths; i++) {
-    if (i <= currentMonth) {
-      // Dados para meses passados (progressão linear)
-      const progress = (endValue - startValue) * (i / currentMonth);
-      data.push(Math.min(startValue + progress, endValue));
-    } else {
-      // Meses futuros (previsão)
-      data.push(null);
-    }
-  }
-  
-  return data;
-}
-
-// Integrar com os filtros
-function integrateChartsWithFilters() {
-  // Atualizar gráficos quando filtros mudarem
-  const filterLinks = document.querySelectorAll('.menu-link[data-filter]');
-  filterLinks.forEach(link => {
-    link.addEventListener('click', () => {
-      setTimeout(updateAllCharts, 100);
     });
-  });
-  
-  // Botão de atualizar gráficos
-  const refreshBtn = document.getElementById('btnRefreshCharts');
-  if (refreshBtn) {
-    refreshBtn.addEventListener('click', updateAllCharts);
-  }
-  
-  // Atualizar gráficos quando rotinas mudarem
-  const originalSaveData = saveData;
-  saveData = function() {
-    originalSaveData.apply(this, arguments);
-    if (state.currentView === 'todasRotinas') {
-      setTimeout(updateAllCharts, 100);
-    }
-  };
 }
 
+// Renderizar gráfico de distribuição de tempo - VERSÃO SIMPLIFICADA
+function renderTimeDistributionChart() {
+    const ctx = document.getElementById('timeDistributionChart');
+    if (!ctx) return;
+    
+    if (ctx.chartInstance) {
+        ctx.chartInstance.destroy();
+    }
+    
+    // Dados de exemplo
+    ctx.chartInstance = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Trabalho', 'Saúde', 'Estudos', 'Pessoal'],
+            datasets: [{
+                data: [30, 20, 25, 25],
+                backgroundColor: ['#ff5454', '#4f46e5', '#10b981', '#f59e0b'],
+                borderWidth: 2
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false
+        }
+    });
+}
+
+// Renderizar gráfico de hábitos ao longo do tempo - VERSÃO SIMPLIFICADA
+function renderHabitsOverTimeChart() {
+    const ctx = document.getElementById('habitsOverTimeChart');
+    if (!ctx) return;
+    
+    if (ctx.chartInstance) {
+        ctx.chartInstance.destroy();
+    }
+    
+    ctx.chartInstance = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: ['01/03', '02/03', '03/03', '04/03', '05/03', '06/03', '07/03'],
+            datasets: [{
+                label: 'Tarefas Concluídas',
+                data: [3, 5, 2, 6, 4, 7, 8],
+                borderColor: '#ff5454',
+                backgroundColor: 'rgba(255, 84, 84, 0.1)',
+                borderWidth: 2,
+                fill: true
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false
+        }
+    });
+}
+
+// Renderizar gráfico de equilíbrio de vida - VERSÃO SIMPLIFICADA
+function renderLifeBalanceChart() {
+    const ctx = document.getElementById('lifeBalanceChart');
+    if (!ctx) return;
+    
+    if (ctx.chartInstance) {
+        ctx.chartInstance.destroy();
+    }
+    
+    ctx.chartInstance = new Chart(ctx, {
+        type: 'radar',
+        data: {
+            labels: ['Trabalho', 'Saúde', 'Estudos', 'Pessoal', 'Lazer'],
+            datasets: [{
+                label: 'Distribuição',
+                data: [7, 5, 6, 4, 3],
+                backgroundColor: 'rgba(255, 84, 84, 0.2)',
+                borderColor: '#ff5454',
+                borderWidth: 2
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false
+        }
+    });
+}
+
+// Renderizar gráfico de metas mensais - VERSÃO SIMPLIFICADA
+function renderMonthlyGoalsChart() {
+    const ctx = document.getElementById('monthlyGoalsChart');
+    if (!ctx) return;
+    
+    if (ctx.chartInstance) {
+        ctx.chartInstance.destroy();
+    }
+    
+    ctx.chartInstance = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Trabalho', 'Saúde', 'Estudos'],
+            datasets: [
+                {
+                    label: 'Concluídas',
+                    data: [8, 5, 7],
+                    backgroundColor: '#10b981'
+                },
+                {
+                    label: 'Pendentes',
+                    data: [2, 5, 3],
+                    backgroundColor: '#ff5454'
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            indexAxis: 'y'
+        }
+    });
+}
+
+// Renderizar gráfico de produtividade diária - VERSÃO SIMPLIFICADA
+function renderDailyProductivityChart() {
+    const ctx = document.getElementById('dailyProductivityChart');
+    if (!ctx) return;
+    
+    if (ctx.chartInstance) {
+        ctx.chartInstance.destroy();
+    }
+    
+    ctx.chartInstance = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: ['7h', '9h', '11h', '13h', '15h', '17h', '19h'],
+            datasets: [{
+                label: 'Produtividade',
+                data: [2, 5, 8, 3, 6, 4, 1],
+                borderColor: '#ff5454',
+                backgroundColor: 'rgba(255, 84, 84, 0.2)',
+                borderWidth: 2,
+                fill: true
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false
+        }
+    });
+}
+
+function renderEmptyCharts() {
+    const chartIds = [
+        'weeklyProgressChart',
+        'timeDistributionChart', 
+        'habitsOverTimeChart',
+        'lifeBalanceChart',
+        'monthlyGoalsChart',
+        'dailyProductivityChart'
+    ];
+    
+    chartIds.forEach(chartId => {
+        const ctx = document.getElementById(chartId);
+        if (ctx) {
+            if (ctx.chartInstance) {
+                ctx.chartInstance.destroy();
+            }
+            
+            // Criar gráfico vazio
+            ctx.chartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Sem dados'],
+                    datasets: [{
+                        label: 'Adicione rotinas para ver os gráficos',
+                        data: [1],
+                        backgroundColor: '#e5e7eb'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+        }
+    });
+}
+
+/* ===========================
+   18) INICIALIZAÇÃO DA APLICAÇÃO
+   =========================== */
+
+// Inicializar a aplicação
 init();
