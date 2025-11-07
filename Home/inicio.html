@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="style.css" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
   <div class="app" data-layout="with-sidebar" data-theme="light">
@@ -242,15 +243,11 @@
           <div class="view" id="viewGraficos" data-viewmode="graficos" aria-labelledby="viewTitle">
             <canvas id="tasksChart" aria-label="Gráfico de tarefas concluídas por dia" role="img"></canvas>
             <div class="container">
-                <header>
-                    <h1>Gráficos para Site de Rotinas</h1>
-                    <p class="subtitle">Visualizações funcionais e atrativas para acompanhar seus hábitos e progresso</p>
-                </header>
                 
                 <div class="charts-grid">
                     <!-- Gráfico de Barras - Progresso Semanal -->
                     <div class="chart-container">
-                        <h2 class="chart-title">📊 Progresso Semanal de Tarefas</h2>
+                        <h2 class="chart-title">Progresso Semanal de Tarefas</h2>
                         <div class="chart-wrapper">
                             <canvas id="weeklyProgressChart"></canvas>
                         </div>
@@ -259,7 +256,7 @@
                     
                     <!-- Gráfico de Pizza - Distribuição de Tempo -->
                     <div class="chart-container">
-                        <h2 class="chart-title">⏰ Distribuição do Tempo</h2>
+                        <h2 class="chart-title">Distribuição do Tempo</h2>
                         <div class="chart-wrapper">
                             <canvas id="timeDistributionChart"></canvas>
                         </div>
@@ -268,44 +265,14 @@
                     
                     <!-- Gráfico de Linha - Hábitos ao Longo do Tempo -->
                     <div class="chart-container">
-                        <h2 class="chart-title">📈 Evolução de Hábitos</h2>
+                        <h2 class="chart-title">Evolução de Hábitos</h2>
                         <div class="chart-wrapper">
                             <canvas id="habitsOverTimeChart"></canvas>
                         </div>
                         <p class="info-text">Monitore a consistência dos seus hábitos ao longo do tempo</p>
                     </div>
-                    
-                    <!-- Gráfico de Radar - Equilíbrio de Vida -->
-                    <div class="chart-container">
-                        <h2 class="chart-title">🎯 Equilíbrio de Vida</h2>
-                        <div class="chart-wrapper">
-                            <canvas id="lifeBalanceChart"></canvas>
-                        </div>
-                        <p class="info-text">Avalie o equilíbrio entre diferentes áreas da sua vida</p>
-                    </div>
-                    
-                    <!-- Gráfico de Barras Horizontais - Metas Mensais -->
-                    <div class="chart-container">
-                        <h2 class="chart-title">🎯 Progresso de Metas Mensais</h2>
-                        <div class="chart-wrapper">
-                            <canvas id="monthlyGoalsChart"></canvas>
-                        </div>
-                        <p class="info-text">Acompanhe seu progresso em direção às metas do mês</p>
-                    </div>
-                    
-                    <!-- Gráfico de Área - Produtividade Diária -->
-                    <div class="chart-container">
-                        <h2 class="chart-title">📅 Produtividade Diária</h2>
-                        <div class="chart-wrapper">
-                            <canvas id="dailyProductivityChart"></canvas>
-                        </div>
-                        <p class="info-text">Visualize seus picos de produtividade ao longo do dia</p>
-                    </div>
                 </div>
                 
-                <footer>
-                    <p>Gráficos funcionais para sites de rotinas - Use para acompanhar hábitos, produtividade e metas</p>
-                </footer>
             </div>
           </div>
         </section>
