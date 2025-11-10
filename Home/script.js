@@ -1,10 +1,9 @@
-
 /* ===========================
    1) CONSTANTES E CONFIGURAÇÕES
    =========================== */
 
 // Chave usada no localStorage para persistir os dados da aplicação
-const STORAGE_KEY = 'routineAppData';
+const STORAGE_KEY = 'routineAppData_v2_multilang';
 
 // Dados padrão usados na primeira execução (apenas exemplo/teste)
 const DEFAULT_DATA = {
@@ -63,8 +62,8 @@ const DEFAULT_DATA = {
     { id: 'tag4', name: 'estudos', color: '#f59e0b' }
   ],
   // Preferências iniciais
-  preferences: { 
-    theme: 'light', 
+  preferences: {
+    theme: 'light',
     showCompleted: true,
     notifications: true,
     language: 'pt-BR',
@@ -76,6 +75,301 @@ const DEFAULT_DATA = {
     displayName: 'Carlos',
     userName: 'onror',
     email: 'exemplo@gmail.com'
+  }
+};
+
+/* ===========================
+   1.1) TRADUÇÕES MULTILÍNGUE (PT / EN / ES / FR)
+   =========================== */
+
+const I18N = {
+  'view.hoje': {
+    'pt-BR': 'Hoje',
+    'en-US': 'Today',
+    'es-ES': 'Hoy',
+    'fr-FR': "Aujourd'hui"
+  },
+  'view.todasRotinas': {
+    'pt-BR': 'Todas as Rotinas',
+    'en-US': 'All Routines',
+    'es-ES': 'Todas las Rutinas',
+    'fr-FR': 'Toutes les routines'
+  },
+  'view.calendario': {
+    'pt-BR': 'Calendário',
+    'en-US': 'Calendar',
+    'es-ES': 'Calendario',
+    'fr-FR': 'Calendrier'
+  },
+  'view.graficos': {
+    'pt-BR': 'Gráficos',
+    'en-US': 'Charts',
+    'es-ES': 'Gráficos',
+    'fr-FR': 'Graphiques'
+  },
+  'view.config': {
+    'pt-BR': 'Configurações',
+    'en-US': 'Settings',
+    'es-ES': 'Configuración',
+    'fr-FR': 'Paramètres'
+  },
+  'menu.visaoGeral': {
+    'pt-BR': 'Visão Geral',
+    'en-US': 'Overview',
+    'es-ES': 'Visión general',
+    'fr-FR': 'Aperçu'
+  },
+  'menu.etiquetas': {
+    'pt-BR': 'Etiquetas',
+    'en-US': 'Tags',
+    'es-ES': 'Etiquetas',
+    'fr-FR': 'Étiquettes'
+  },
+  'menu.filtros': {
+    'pt-BR': 'Filtros',
+    'en-US': 'Filters',
+    'es-ES': 'Filtros',
+    'fr-FR': 'Filtres'
+  },
+  'filter.pendentes': {
+    'pt-BR': 'Pendentes',
+    'en-US': 'Pending',
+    'es-ES': 'Pendientes',
+    'fr-FR': 'En attente'
+  },
+  'filter.concluidas': {
+    'pt-BR': 'Concluídas',
+    'en-US': 'Completed',
+    'es-ES': 'Completadas',
+    'fr-FR': 'Terminées'
+  },
+  'filter.alta': {
+    'pt-BR': 'Prioridade alta',
+    'en-US': 'High Priority',
+    'es-ES': 'Prioridad alta',
+    'fr-FR': 'Priorité haute'
+  },
+  'filter.media': {
+    'pt-BR': 'Prioridade média',
+    'en-US': 'Medium Priority',
+    'es-ES': 'Prioridad media',
+    'fr-FR': 'Priorité moyenne'
+  },
+  'filter.baixa': {
+    'pt-BR': 'Prioridade baixa',
+    'en-US': 'Low Priority',
+    'es-ES': 'Prioridad baja',
+    'fr-FR': 'Priorité basse'
+  },
+  'filter.semData': {
+    'pt-BR': 'Sem data',
+    'en-US': 'No Date',
+    'es-ES': 'Sin fecha',
+    'fr-FR': 'Sans date'
+  },
+  'button.novaRotina': {
+    'pt-BR': '+ Nova rotina',
+    'en-US': '+ New routine',
+    'es-ES': '+ Nueva rutina',
+    'fr-FR': '+ Nouvelle routine'
+  },
+  'button.saveSettings': {
+    'pt-BR': 'Salvar Configurações',
+    'en-US': 'Save Settings',
+    'es-ES': 'Guardar configuración',
+    'fr-FR': 'Enregistrer les paramètres'
+  },
+  'button.resetSettings': {
+    'pt-BR': 'Restaurar Padrões',
+    'en-US': 'Reset to Default',
+    'es-ES': 'Restaurar valores',
+    'fr-FR': 'Restaurer par défaut'
+  },
+  'label.darkMode': {
+    'pt-BR': 'Modo escuro',
+    'en-US': 'Dark Mode',
+    'es-ES': 'Modo oscuro',
+    'fr-FR': 'Mode sombre'
+  },
+  'label.appLanguage': {
+    'pt-BR': 'Idioma do aplicativo',
+    'en-US': 'App Language',
+    'es-ES': 'Idioma de la app',
+    'fr-FR': "Langue de l'application"
+  },
+  'label.fontFamily': {
+    'pt-BR': 'Fonte personalizada',
+    'en-US': 'Font Family',
+    'es-ES': 'Fuente',
+    'fr-FR': 'Police'
+  },
+  'label.fontSize': {
+    'pt-BR': 'Tamanho da fonte',
+    'en-US': 'Font Size',
+    'es-ES': 'Tamaño de fuente',
+    'fr-FR': 'Taille de police'
+  },
+  'label.notifications': {
+    'pt-BR': 'Ativar notificações do navegador',
+    'en-US': 'Enable browser notifications',
+    'es-ES': 'Activar notificaciones del navegador',
+    'fr-FR': "Activer les notifications du navigateur"
+  },
+
+  // Profile related
+  'profile.meuPerfil': {
+    'pt-BR': 'Meu perfil',
+    'en-US': 'My profile',
+    'es-ES': 'Mi perfil',
+    'fr-FR': 'Mon profil'
+  },
+  'profile.editarPerfil': {
+    'pt-BR': 'Editar perfil de usuário',
+    'en-US': 'Edit user profile',
+    'es-ES': 'Editar perfil',
+    'fr-FR': "Modifier le profil d'utilisateur"
+  },
+  'profile.nomeExibido': {
+    'pt-BR': 'Nome exibido',
+    'en-US': 'Display name',
+    'es-ES': 'Nombre visible',
+    'fr-FR': "Nom affiché"
+  },
+  'profile.nomeUsuario': {
+    'pt-BR': 'Nome de usuário',
+    'en-US': 'Username',
+    'es-ES': 'Nombre de usuario',
+    'fr-FR': "Nom d'utilisateur"
+  },
+  'profile.email': {
+    'pt-BR': 'E-mail',
+    'en-US': 'Email',
+    'es-ES': 'Correo',
+    'fr-FR': 'Email'
+  },
+
+  // Details panel
+  'details.title': {
+    'pt-BR': 'Título',
+    'en-US': 'Title',
+    'es-ES': 'Título',
+    'fr-FR': 'Titre'
+  },
+  'details.description': {
+    'pt-BR': 'Descrição',
+    'en-US': 'Description',
+    'es-ES': 'Descripción',
+    'fr-FR': 'Description'
+  },
+  'details.date': {
+    'pt-BR': 'Data',
+    'en-US': 'Date',
+    'es-ES': 'Fecha',
+    'fr-FR': 'Date'
+  },
+  'details.time': {
+    'pt-BR': 'Hora',
+    'en-US': 'Time',
+    'es-ES': 'Hora',
+    'fr-FR': 'Heure'
+  },
+  'details.priority': {
+    'pt-BR': 'Prioridade',
+    'en-US': 'Priority',
+    'es-ES': 'Prioridad',
+    'fr-FR': 'Priorité'
+  },
+  'details.tag': {
+    'pt-BR': 'Etiqueta',
+    'en-US': 'Tag',
+    'es-ES': 'Etiqueta',
+    'fr-FR': 'Étiquette'
+  },
+  'details.delete': {
+    'pt-BR': 'Excluir',
+    'en-US': 'Delete',
+    'es-ES': 'Eliminar',
+    'fr-FR': 'Supprimer'
+  },
+  'details.duplicate': {
+    'pt-BR': 'Duplicar',
+    'en-US': 'Duplicate',
+    'es-ES': 'Duplicar',
+    'fr-FR': 'Dupliquer'
+  },
+  'details.save': {
+    'pt-BR': 'Salvar',
+    'en-US': 'Save',
+    'es-ES': 'Guardar',
+    'fr-FR': 'Enregistrer'
+  },
+
+  // Empty / empty state
+  'empty.none': {
+    'pt-BR': 'Nenhuma rotina encontrada',
+    'en-US': 'No routines found',
+    'es-ES': 'No se encontraron rutinas',
+    'fr-FR': "Aucune routine trouvée"
+  },
+
+  // Toasts (we will use keys and pass to showToastTranslation)
+  'toast.added': {
+    'pt-BR': 'Rotina adicionada com sucesso!',
+    'en-US': 'Routine added successfully!',
+    'es-ES': '¡Rutina añadida con éxito!',
+    'fr-FR': 'Routine ajoutée avec succès !'
+  },
+  'toast.saved': {
+    'pt-BR': 'Rotina salva com sucesso!',
+    'en-US': 'Routine saved successfully!',
+    'es-ES': '¡Rutina guardada con éxito!',
+    'fr-FR': 'Routine enregistrée avec succès !'
+  },
+  'toast.deleted': {
+    'pt-BR': 'Rotina excluída com sucesso!',
+    'en-US': 'Routine deleted successfully!',
+    'es-ES': '¡Rutina eliminada con éxito!',
+    'fr-FR': 'Routine supprimée avec succès !'
+  },
+  'toast.copied': {
+    'pt-BR': 'Rotina duplicada com sucesso!',
+    'en-US': 'Routine duplicated successfully!',
+    'es-ES': '¡Rutina duplicada con éxito!',
+    'fr-FR': 'Routine dupliquée avec succès !'
+  },
+
+  // Chart titles
+  'chart.weeklyProgress': {
+    'pt-BR': 'Progresso Semanal de Tarefas',
+    'en-US': 'Weekly Task Progress',
+    'es-ES': 'Progreso semanal de tareas',
+    'fr-FR': "Progression hebdomadaire des tâches"
+  },
+  'chart.timeDistribution': {
+    'pt-BR': 'Distribuição do Tempo',
+    'en-US': 'Time Distribution',
+    'es-ES': 'Distribución del tiempo',
+    'fr-FR': "Répartition du temps"
+  },
+  'chart.habitsOverTime': {
+    'pt-BR': 'Evolução de Hábitos',
+    'en-US': 'Habits Over Time',
+    'es-ES': 'Evolución de hábitos',
+    'fr-FR': "Évolution des habitudes"
+  },
+
+  // Calendar month/day names (we'll use these programmatically)
+  'months': {
+    'pt-BR': ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+    'en-US': ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+    'es-ES': ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+    'fr-FR': ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre']
+  },
+  'weekdays': {
+    'pt-BR': ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'],
+    'en-US': ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+    'es-ES': ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'],
+    'fr-FR': ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam']
   }
 };
 
@@ -192,7 +486,55 @@ const templates = {
 };
 
 /* ===========================
-   4) INICIALIZAÇÃO
+   4) SISTEMA DE TRADUÇÃO
+   =========================== */
+
+// Obtém idioma atual (padrão pt-BR)
+function getLang() {
+  return (state.preferences.language || 'pt-BR');
+}
+
+// Traduz chave (key) com fallback
+function t(key) {
+  const lang = getLang();
+  const entry = I18N[key];
+  if (!entry) return key;
+  return entry[lang] || entry['pt-BR'] || key;
+}
+
+// Aplica tradução nos elementos com data-i18n
+function applyLanguageToDOM() {
+  const lang = getLang();
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (I18N[key] && I18N[key][lang]) {
+      el.textContent = I18N[key][lang];
+    }
+  });
+
+  // Atualiza textos dinâmicos (por ex. títulos de view)
+  updateViewTitle();
+
+  // Atualiza textos do calendário e dos gráficos, se existirem
+  if (typeof renderCalendar === 'function') renderCalendar();
+  if (typeof initCharts === 'function') initCharts();
+}
+
+// Recarrega a página ao trocar idioma
+function changeLanguage(newLang) {
+  state.preferences.language = newLang;
+  saveData();
+  window.location.reload(); // funciona localmente (file://)
+}
+
+// Toast multilíngue
+function showToastTranslation(key, type = 'info') {
+  const msg = t(key);
+  showToast(msg, type);
+}
+
+/* ===========================
+   5) INICIALIZAÇÃO
    =========================== */
 
 // Função de inicialização que configura tudo e renderiza o estado inicial
@@ -221,6 +563,9 @@ function init() {
   // Carrega configurações
   loadSettings();
 
+  // Aplica traduções
+  applyLanguageToDOM();
+
   // Inicializar gráficos se estiver na view de gráficos
   if (state.currentView === 'graficos') {
     setTimeout(initCharts, 100); // Pequeno delay para garantir que o DOM esteja pronto
@@ -231,7 +576,7 @@ function init() {
 }
 
 /* ===========================
-   5) PERSISTÊNCIA (localStorage)
+   6) PERSISTÊNCIA (localStorage)
    =========================== */
 
 // Carrega os dados salvos no localStorage. Se não existir, usa DEFAULT_DATA
@@ -284,7 +629,7 @@ function saveData() {
       showSidebar: state.showSidebar
     };
     localStorage.setItem(STORAGE_KEY, JSON.stringify(dataToSave));
-    
+
     // Se estiver na view de gráficos, atualizar os gráficos
     if (state.currentView === 'graficos') {
       initCharts();
@@ -295,7 +640,7 @@ function saveData() {
 }
 
 /* ===========================
-   6) UTILITÁRIOS (helpers)
+   7) UTILITÁRIOS (helpers)
    =========================== */
 
 // Gera um ID único simples para novas rotinas (prefixo 't' + contador)
@@ -331,7 +676,7 @@ function showToast(message, type = 'info', duration = 3000) {
     toast.classList.add('fade-out');
     // remove depois da transição (evita remoção imediata cortando animação)
     toast.addEventListener('transitionend', () => {
-      try { toast.remove(); } catch(e) {}
+      try { toast.remove(); } catch (e) { }
     });
   }, duration);
 }
@@ -360,14 +705,14 @@ function normalizeTag(tagStr) {
 }
 
 /* ===========================
-   7) CRUD DE ROTINAS (Add / Toggle / Open / Save / Delete / Duplicate)
+   8) CRUD DE ROTINAS (Add / Toggle / Open / Save / Delete / Duplicate)
    =========================== */
 
 // Adiciona uma nova rotina ao estado e salva
 function addNewRoutine({ title, description, date, time, priority, tag, status = 'todo', completed = false }) {
   // Validação mínima
   if (!title || !title.trim()) {
-    showToast('O título é obrigatório.', 'error');
+    showToastTranslation('toast.requiredTitle', 'error');
     return null;
   }
 
@@ -386,7 +731,7 @@ function addNewRoutine({ title, description, date, time, priority, tag, status =
   state.routines.push(newRoutine);
   saveData();
   render(); // atualiza UI
-  showToast('Rotina adicionada com sucesso!', 'success');
+  showToastTranslation('toast.added', 'success');
   return newRoutine;
 }
 
@@ -470,7 +815,7 @@ function saveTaskDetails(e) {
   const tag = DOM.taskTag ? normalizeTag(DOM.taskTag.value) : undefined;
 
   if (!title) {
-    showToast('O título da rotina é obrigatório.', 'error');
+    showToastTranslation('toast.requiredTitle', 'error');
     return;
   }
 
@@ -487,7 +832,7 @@ function saveTaskDetails(e) {
   saveData();
   render();
   closeDetails();
-  showToast('Rotina salva com sucesso!', 'success');
+  showToastTranslation('toast.saved', 'success');
 }
 
 // Exclui a tarefa selecionada
@@ -501,7 +846,7 @@ function deleteCurrentTask() {
   saveData();
   render();
   closeDetails();
-  showToast('Rotina excluída com sucesso!', 'info');
+  showToastTranslation('toast.deleted', 'info');
 }
 
 // Duplica a tarefa selecionada
@@ -520,11 +865,11 @@ function duplicateCurrentTask() {
   saveData();
   render();
   closeDetails();
-  showToast('Rotina duplicada com sucesso!', 'success');
+  showToastTranslation('toast.copied', 'success');
 }
 
 /* ===========================
-   8) GESTÃO DE ETIQUETAS (TAGS)
+   9) GESTÃO DE ETIQUETAS (TAGS)
    =========================== */
 
 // Adiciona nova etiqueta ao estado (verifica duplicidade por nome)
@@ -593,7 +938,7 @@ function renderTags() {
 }
 
 /* ===========================
-   9) FILTRAGEM E LISTAGEM DE TAREFAS
+   10) FILTRAGEM E LISTAGEM DE TAREFAS
    =========================== */
 
 // Retorna um array de tarefas filtradas de acordo com a view atual e filtros rápidos
@@ -611,7 +956,7 @@ function getFilteredTasks() {
       tasks = tasks.filter(task => {
         if (!task.date) return false;
         const td = new Date(task.date + 'T00:00:00');
-        td.setHours(0,0,0,0);
+        td.setHours(0, 0, 0, 0);
         return td.getTime() === today.getTime();
       });
       break;
@@ -663,17 +1008,17 @@ function getFilteredTasks() {
 }
 
 /* ===========================
-   10) RENDERIZAÇÃO (Lista / Quadro / Calendário / Config)
+   11) RENDERIZAÇÃO (Lista / Quadro / Calendário / Config)
    =========================== */
 
 // Atualiza título da view (ex.: Hoje, Calendário)
 function updateViewTitle() {
   const titles = {
-    'hoje': 'Hoje',
-    'todasRotinas': 'Todas as Rotinas',
-    'calendario': 'Calendário',
-    'config': 'Configurações',
-    'graficos': 'Gráficos'
+    'hoje': t('view.hoje'),
+    'todasRotinas': t('view.todasRotinas'),
+    'calendario': t('view.calendario'),
+    'config': t('view.config'),
+    'graficos': t('view.graficos')
   };
   if (DOM.viewTitle) DOM.viewTitle.textContent = titles[state.currentView] || 'Rotinas';
 }
@@ -696,7 +1041,7 @@ function renderTaskList() {
   if (!tasks || tasks.length === 0) {
     const empty = document.createElement('div');
     empty.className = 'empty-state';
-    empty.textContent = 'Nenhuma rotina encontrada';
+    empty.textContent = t('empty.none');
     targetList.appendChild(empty);
     return;
   }
@@ -717,7 +1062,7 @@ function renderTaskListWithTasks(tasks) {
   if (!tasks || tasks.length === 0) {
     const empty = document.createElement('div');
     empty.className = 'empty-state';
-    empty.textContent = 'Nenhuma rotina encontrada';
+    empty.textContent = t('empty.none');
     DOM.taskListToday.appendChild(empty);
     return;
   }
@@ -765,7 +1110,7 @@ function render() {
 }
 
 /* ---------------------------
-   10.1) Render - Quadro Kanban
+   11.1) Render - Quadro Kanban
    --------------------------- */
 
 // Renderiza o quadro Kanban preenchendo as colunas por status
@@ -796,7 +1141,7 @@ function renderBoard() {
 }
 
 /* ---------------------------
-   10.2) Render - Calendário - CORREÇÃO COMPLETA
+   11.2) Render - Calendário - CORREÇÃO COMPLETA
    --------------------------- */
 
 // Renderiza o calendário do mês atual (state.currentDate)
@@ -811,7 +1156,8 @@ function renderCalendar() {
   const month = state.currentDate.getMonth();
 
   // Nome do mês (em PT-BR)
-  const monthNames = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+  const lang = getLang();
+  const monthNames = I18N.months[lang];
   DOM.calTitle.textContent = `${monthNames[month]} ${year}`;
 
   // Determina primeiro dia da semana do mês e quantidade de dias
@@ -820,7 +1166,7 @@ function renderCalendar() {
   const prevMonthDays = new Date(year, month, 0).getDate();
 
   // Cabeçalho (dias da semana)
-  const dayNames = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+  const dayNames = I18N.weekdays[lang];
   dayNames.forEach(d => {
     const header = document.createElement('div');
     header.className = 'calendar-day-header';
@@ -918,7 +1264,7 @@ function createCalendarDay(day, isOtherMonth, isToday = false, fullDate = null) 
 }
 
 /* ===========================
-   11) CRIAÇÃO DE ELEMENTOS (task item e board card)
+   12) CRIAÇÃO DE ELEMENTOS (task item e board card)
    =========================== */
 
 // Cria e retorna um elemento li.populado para a lista usando o template tplTaskItem
@@ -958,14 +1304,14 @@ function createTaskElement(task) {
   if (dueEl) {
     if (task.date) {
       const d = new Date(task.date + 'T00:00:00');
-      dueEl.textContent = d.toLocaleDateString('pt-BR');
+      dueEl.textContent = d.toLocaleDateString(getLang());
       // marca atraso se não concluída e data passada
       const today = new Date();
       today.setHours(0, 0, 0, 0);
       if (!task.completed && d < today) dueEl.classList.add('overdue');
       else dueEl.classList.remove('overdue');
     } else {
-      dueEl.textContent = 'Sem data';
+      dueEl.textContent = t('filter.semData');
     }
   }
 
@@ -973,7 +1319,12 @@ function createTaskElement(task) {
   const prioEl = clone.querySelector('.priority');
   if (prioEl) {
     prioEl.className = 'priority'; // reset classes
-    prioEl.textContent = task.priority === 'high' ? 'Alta' : (task.priority === 'low' ? 'Baixa' : 'Média');
+    const priorityText = {
+      'high': t('filter.alta'),
+      'medium': t('filter.media'),
+      'low': t('filter.baixa')
+    };
+    prioEl.textContent = priorityText[task.priority] || t('filter.media');
     prioEl.classList.add(task.priority || 'medium'); // adiciona classe 'high'|'medium'|'low' para estilo
   }
 
@@ -1033,12 +1384,12 @@ function createBoardCard(task) {
   if (dueEl) {
     if (task.date) {
       const d = new Date(task.date + 'T00:00:00');
-      dueEl.textContent = d.toLocaleDateString('pt-BR');
-      const today = new Date(); today.setHours(0,0,0,0);
+      dueEl.textContent = d.toLocaleDateString(getLang());
+      const today = new Date(); today.setHours(0, 0, 0, 0);
       if (!task.completed && d < today) dueEl.classList.add('overdue');
       else dueEl.classList.remove('overdue');
     } else {
-      dueEl.textContent = 'Sem data';
+      dueEl.textContent = t('filter.semData');
     }
   }
 
@@ -1046,7 +1397,12 @@ function createBoardCard(task) {
   const prioEl = clone.querySelector('.priority');
   if (prioEl) {
     prioEl.className = 'priority';
-    prioEl.textContent = task.priority === 'high' ? 'Alta' : (task.priority === 'low' ? 'Baixa' : 'Média');
+    const priorityText = {
+      'high': t('filter.alta'),
+      'medium': t('filter.media'),
+      'low': t('filter.baixa')
+    };
+    prioEl.textContent = priorityText[task.priority] || t('filter.media');
     prioEl.classList.add(task.priority || 'medium');
   }
 
@@ -1078,7 +1434,7 @@ function createBoardCard(task) {
   if (actionButtons.length >= 2) {
     actionButtons[0].addEventListener('click', () => openTaskDetails(task.id)); // Detalhes
     // Botão concluir / desfazer
-    actionButtons[1].textContent = task.completed ? 'Desfazer' : 'Concluir';
+    actionButtons[1].textContent = task.completed ? t('details.undo') : t('details.complete');
     actionButtons[1].addEventListener('click', () => toggleTaskCompletion(task.id));
   }
 
@@ -1091,7 +1447,7 @@ function createBoardCard(task) {
 }
 
 /* ===========================
-   12) DRAG & DROP (Kanban)
+   13) DRAG & DROP (Kanban)
    =========================== */
 
 // Configura eventos de drag & drop nas colunas
@@ -1141,11 +1497,17 @@ function handleDrop(e) {
   // Persistência e render
   saveData();
   render(); // chama render (ou renderBoard para menor custo)
-  showToast(`Rotina movida para: ${newStatus === 'todo' ? 'A fazer' : newStatus === 'doing' ? 'Em progresso' : 'Concluído'}`, 'info');
+
+  const statusText = {
+    'todo': 'A fazer',
+    'doing': 'Em progresso',
+    'done': 'Concluído'
+  };
+  showToast(`Rotina movida para: ${statusText[newStatus] || 'A fazer'}`, 'info');
 }
 
 /* ===========================
-   13) CONFIGURAÇÕES E PREFERÊNCIAS
+   14) CONFIGURAÇÕES E PREFERÊNCIAS
    =========================== */
 
 // Carrega as configurações salvas
@@ -1156,23 +1518,23 @@ function loadSettings() {
       DOM.app.setAttribute('data-theme', state.preferences.theme);
       if (DOM.themeToggle) DOM.themeToggle.checked = state.preferences.theme === 'dark';
     }
-    
+
     // Notificações
     if (DOM.notificationsToggle && state.preferences.notifications !== undefined) {
       DOM.notificationsToggle.checked = state.preferences.notifications;
     }
-    
+
     // Idioma
     if (DOM.appLanguage && state.preferences.language) {
       DOM.appLanguage.value = state.preferences.language;
     }
-    
+
     // Fonte
     if (DOM.fontFamily && state.preferences.fontFamily) {
       DOM.fontFamily.value = state.preferences.fontFamily;
       document.body.style.fontFamily = state.preferences.fontFamily;
     }
-    
+
     // Tamanho da fonte
     if (DOM.fontSize && state.preferences.fontSize) {
       DOM.fontSize.value = state.preferences.fontSize;
@@ -1192,7 +1554,7 @@ function saveSettings() {
     fontSize: DOM.fontSize ? DOM.fontSize.value : '16',
     showCompleted: state.preferences.showCompleted !== undefined ? state.preferences.showCompleted : true
   };
-  
+
   // Aplica as configurações
   DOM.app.setAttribute('data-theme', state.preferences.theme);
   if (DOM.fontFamily) document.body.style.fontFamily = state.preferences.fontFamily;
@@ -1200,16 +1562,16 @@ function saveSettings() {
     document.body.style.fontSize = state.preferences.fontSize + 'px';
     if (DOM.fontSizeValue) DOM.fontSizeValue.textContent = state.preferences.fontSize + 'px';
   }
-  
+
   saveData();
-  showToast('Configurações salvas com sucesso!', 'success');
+  showToastTranslation('toast.saved', 'success');
 }
 
 // Restaura configurações padrão
 function resetSettings() {
   const confirmed = confirm('Deseja restaurar as configurações padrão?');
   if (!confirmed) return;
-  
+
   state.preferences = {
     theme: 'light',
     notifications: true,
@@ -1218,10 +1580,11 @@ function resetSettings() {
     fontSize: '16',
     showCompleted: true
   };
-  
+
   loadSettings();
   saveData();
-  showToast('Configurações restauradas para o padrão!', 'info');
+  applyLanguageToDOM();
+  showToastTranslation('toast.saved', 'info');
 }
 
 // Alterna o tema
@@ -1246,25 +1609,25 @@ function renderProfile() {
 }
 
 /* ===========================
-   14) SISTEMA DE PERÍODO PERSONALIZADO
+   15) SISTEMA DE PERÍODO PERSONALIZADO
    =========================== */
 
 // Abrir modal de período personalizado
 function openCustomPeriodModal() {
   if (!DOM.modalCustomPeriod) return;
-  
+
   // Definir data mínima como hoje
   const today = new Date().toISOString().split('T')[0];
   if (DOM.customStartDate) DOM.customStartDate.min = today;
   if (DOM.customEndDate) DOM.customEndDate.min = today;
   if (DOM.recurringStartDate) DOM.recurringStartDate.min = today;
-  
+
   // Limpar formulário
   DOM.customPeriodForm.reset();
-  
+
   // Mostrar seção padrão (intervalo)
   showPeriodSection('range');
-  
+
   // Abrir modal
   if (DOM.modalCustomPeriod.showModal) DOM.modalCustomPeriod.showModal();
   if (DOM.customTitle) DOM.customTitle.focus();
@@ -1273,10 +1636,10 @@ function openCustomPeriodModal() {
 // Função para fechar o modal de período personalizado
 function closeCustomPeriodModal() {
   if (!DOM.modalCustomPeriod) return;
-  
+
   // Limpar formulário
   if (DOM.customPeriodForm) DOM.customPeriodForm.reset();
-  
+
   // Fechar modal
   if (DOM.modalCustomPeriod.close) DOM.modalCustomPeriod.close();
 }
@@ -1287,9 +1650,9 @@ function showPeriodSection(type) {
   if (DOM.periodRangeSection) DOM.periodRangeSection.style.display = 'none';
   if (DOM.periodSpecificSection) DOM.periodSpecificSection.style.display = 'none';
   if (DOM.periodRecurringSection) DOM.periodRecurringSection.style.display = 'none';
-  
+
   // Mostrar a seção selecionada
-  switch(type) {
+  switch (type) {
     case 'range':
       if (DOM.periodRangeSection) DOM.periodRangeSection.style.display = 'block';
       break;
@@ -1305,24 +1668,24 @@ function showPeriodSection(type) {
 // Adicionar campo de data para dias específicos
 function addSpecificDateField() {
   if (!DOM.specificDatesContainer) return;
-  
+
   const dateRow = document.createElement('div');
   dateRow.className = 'date-input-row';
-  
+
   const dateInput = document.createElement('input');
   dateInput.type = 'date';
   dateInput.className = 'specific-date';
-  
+
   const removeBtn = document.createElement('button');
   removeBtn.type = 'button';
   removeBtn.className = 'btn icon only remove-date';
   removeBtn.setAttribute('aria-label', 'Remover data');
   removeBtn.textContent = '✕';
-  
-  removeBtn.addEventListener('click', function() {
+
+  removeBtn.addEventListener('click', function () {
     dateRow.remove();
   });
-  
+
   dateRow.appendChild(dateInput);
   dateRow.appendChild(removeBtn);
   DOM.specificDatesContainer.appendChild(dateRow);
@@ -1331,11 +1694,11 @@ function addSpecificDateField() {
 // Atualizar unidade de intervalo baseada na frequência
 function updateIntervalUnit() {
   if (!DOM.recurringFrequency || !DOM.intervalUnit) return;
-  
+
   const frequency = DOM.recurringFrequency.value;
   let unit = 'dia(s)';
-  
-  switch(frequency) {
+
+  switch (frequency) {
     case 'weekly':
       unit = 'semana(s)';
       break;
@@ -1343,18 +1706,18 @@ function updateIntervalUnit() {
       unit = 'mês(es)';
       break;
   }
-  
+
   DOM.intervalUnit.textContent = unit;
 }
 
 // Habilitar/desabilitar campos de término baseado na seleção
 function toggleRecurringEndFields() {
   const selectedValue = document.querySelector('input[name="recurringEnd"]:checked').value;
-  
+
   if (DOM.recurringOccurrences) {
     DOM.recurringOccurrences.disabled = selectedValue !== 'after';
   }
-  
+
   if (DOM.recurringEndDate) {
     DOM.recurringEndDate.disabled = selectedValue !== 'on';
   }
@@ -1363,14 +1726,14 @@ function toggleRecurringEndFields() {
 // Gerar todas as datas para uma rotina baseada no tipo de período
 function generateRoutineDates(periodType, formData) {
   let dates = [];
-  
-  switch(periodType) {
+
+  switch (periodType) {
     case 'range':
       // Gerar datas entre início e fim, considerando apenas os dias da semana selecionados
       const start = new Date(formData.startDate);
       const end = new Date(formData.endDate);
       const selectedDays = formData.selectedDays || [1, 2, 3, 4, 5]; // Padrão: dias de semana
-      
+
       let current = new Date(start);
       while (current <= end) {
         if (selectedDays.includes(current.getDay())) {
@@ -1379,18 +1742,18 @@ function generateRoutineDates(periodType, formData) {
         current.setDate(current.getDate() + 1);
       }
       break;
-      
+
     case 'specific':
       // Usar as datas específicas fornecidas
       dates = formData.specificDates.filter(date => date.trim() !== '');
       break;
-      
+
     case 'recurring':
       // Gerar datas baseadas na recorrência
       dates = generateRecurringDates(formData);
       break;
   }
-  
+
   return dates;
 }
 
@@ -1400,22 +1763,22 @@ function generateRecurringDates(formData) {
   const startDate = new Date(formData.startDate);
   const frequency = formData.frequency;
   const interval = parseInt(formData.interval) || 1;
-  
+
   let currentDate = new Date(startDate);
   let occurrenceCount = 0;
   const maxOccurrences = formData.endType === 'after' ? parseInt(formData.occurrences) : Infinity;
   const endDate = formData.endType === 'on' ? new Date(formData.endDate) : null;
-  
+
   while (
-    (formData.endType === 'never' || 
-     (formData.endType === 'after' && occurrenceCount < maxOccurrences) ||
-     (formData.endType === 'on' && currentDate <= endDate))
+    (formData.endType === 'never' ||
+      (formData.endType === 'after' && occurrenceCount < maxOccurrences) ||
+      (formData.endType === 'on' && currentDate <= endDate))
   ) {
     dates.push(formatDateForInput(currentDate));
     occurrenceCount++;
-    
+
     // Avançar para a próxima data baseada na frequência
-    switch(frequency) {
+    switch (frequency) {
       case 'daily':
         currentDate.setDate(currentDate.getDate() + interval);
         break;
@@ -1426,25 +1789,25 @@ function generateRecurringDates(formData) {
         currentDate.setMonth(currentDate.getMonth() + interval);
         break;
     }
-    
+
     // Limitar a um número razoável de ocorrências para evitar loops infinitos
     if (occurrenceCount > 365) break;
   }
-  
+
   return dates;
 }
 
 // Adicionar múltiplas rotinas baseadas nas datas geradas
 function addRoutinesWithCustomPeriod(formData) {
   const dates = generateRoutineDates(formData.periodType, formData);
-  
+
   if (dates.length === 0) {
     showToast('Nenhuma data válida foi gerada para esta rotina.', 'error');
     return;
   }
-  
+
   let createdCount = 0;
-  
+
   dates.forEach(date => {
     const routineData = {
       title: formData.title,
@@ -1457,37 +1820,37 @@ function addRoutinesWithCustomPeriod(formData) {
       completed: false,
       isRecurring: formData.periodType === 'recurring'
     };
-    
+
     const result = addNewRoutine(routineData);
     if (result) createdCount++;
   });
-  
+
   showToast(`${createdCount} rotina(s) criada(s) com sucesso!`, 'success');
 }
 
 // Processar formulário de período personalizado
 function processCustomPeriodForm(e) {
   if (e && e.preventDefault) e.preventDefault();
-  
+
   // Verificar se é o botão cancelar
   const submitter = e.submitter;
   if (submitter && submitter.value === 'cancel') {
     closeCustomPeriodModal();
     return;
   }
-  
+
   // Coletar dados do formulário
   const title = DOM.customTitle ? DOM.customTitle.value.trim() : '';
   const description = DOM.customDesc ? DOM.customDesc.value : '';
   const time = DOM.customTime ? DOM.customTime.value || undefined : undefined;
   const priority = DOM.customPriority ? DOM.customPriority.value : 'medium';
   const tag = DOM.customTag ? normalizeTag(DOM.customTag.value) : undefined;
-  
+
   if (!title) {
-    showToast('O título da rotina é obrigatório.', 'error');
+    showToastTranslation('toast.requiredTitle', 'error');
     return;
   }
-  
+
   // Determinar tipo de período selecionado
   const periodType = document.querySelector('input[name="periodType"]:checked').value;
   let formData = {
@@ -1498,69 +1861,69 @@ function processCustomPeriodForm(e) {
     tag,
     periodType
   };
-  
+
   // Coletar dados específicos do tipo de período
-  switch(periodType) {
+  switch (periodType) {
     case 'range':
       const startDate = DOM.customStartDate ? DOM.customStartDate.value : '';
       const endDate = DOM.customEndDate ? DOM.customEndDate.value : '';
-      
+
       if (!startDate || !endDate) {
         showToast('As datas de início e término são obrigatórias.', 'error');
         return;
       }
-      
+
       if (new Date(startDate) > new Date(endDate)) {
         showToast('A data de início não pode ser posterior à data de término.', 'error');
         return;
       }
-      
+
       // Coletar dias da semana selecionados
       const selectedDays = [];
       document.querySelectorAll('.weekday-option input[type="checkbox"]:checked').forEach(cb => {
         selectedDays.push(parseInt(cb.value));
       });
-      
+
       formData.startDate = startDate;
       formData.endDate = endDate;
       formData.selectedDays = selectedDays;
       break;
-      
+
     case 'specific':
       const specificDates = [];
       document.querySelectorAll('.specific-date').forEach(input => {
         if (input.value) specificDates.push(input.value);
       });
-      
+
       if (specificDates.length === 0) {
         showToast('Pelo menos uma data específica deve ser fornecida.', 'error');
         return;
       }
-      
+
       formData.specificDates = specificDates;
       break;
-      
+
     case 'recurring':
       const recurringStartDate = DOM.recurringStartDate ? DOM.recurringStartDate.value : '';
       const frequency = DOM.recurringFrequency ? DOM.recurringFrequency.value : 'weekly';
       const interval = DOM.recurringInterval ? DOM.recurringInterval.value : '1';
       const endType = document.querySelector('input[name="recurringEnd"]:checked').value;
-      
+
       if (!recurringStartDate) {
         showToast('A data de início é obrigatória para rotinas recorrentes.', 'error');
         return;
       }
-      
+
       formData.startDate = recurringStartDate;
       formData.frequency = frequency;
       formData.interval = interval;
       formData.endType = endType;
-      
+
       if (endType === 'after') {
         formData.occurrences = DOM.recurringOccurrences ? DOM.recurringOccurrences.value : '10';
       } else if (endType === 'on') {
         formData.endDate = DOM.recurringEndDate ? DOM.recurringEndDate.value : '';
-        
+
         if (!formData.endDate) {
           showToast('A data de término é obrigatória quando selecionada.', 'error');
           return;
@@ -1568,16 +1931,16 @@ function processCustomPeriodForm(e) {
       }
       break;
   }
-  
+
   // Criar as rotinas
   addRoutinesWithCustomPeriod(formData);
-  
+
   // Fechar modal
   closeCustomPeriodModal();
 }
 
 /* ===========================
-   15) EVENTOS GERAIS E LIGAÇÕES
+   16) EVENTOS GERAIS E LIGAÇÕES
    =========================== */
 
 // Configura todos os listeners de UI (botões, formulários, links, etc.)
@@ -1637,29 +2000,29 @@ function setupEventListeners() {
   // Event listeners para o modal de período personalizado
   if (DOM.periodTypeRadios) {
     DOM.periodTypeRadios.forEach(radio => {
-      radio.addEventListener('change', function() {
+      radio.addEventListener('change', function () {
         showPeriodSection(this.value);
       });
     });
   }
-  
+
   if (DOM.addDateBtn) {
     DOM.addDateBtn.addEventListener('click', addSpecificDateField);
   }
-  
+
   if (DOM.recurringFrequency) {
     DOM.recurringFrequency.addEventListener('change', updateIntervalUnit);
   }
-  
+
   if (DOM.recurringEndRadios) {
     DOM.recurringEndRadios.forEach(radio => {
       radio.addEventListener('change', toggleRecurringEndFields);
     });
   }
-  
+
   if (DOM.customPeriodForm) {
     DOM.customPeriodForm.addEventListener('submit', processCustomPeriodForm);
-    
+
     // Botão cancelar
     const cancelBtn = DOM.customPeriodForm.querySelector('button[value="cancel"]');
     if (cancelBtn) {
@@ -1683,22 +2046,29 @@ function setupEventListeners() {
   if (DOM.themeToggle) {
     DOM.themeToggle.addEventListener('change', toggleTheme);
   }
-  
+
   if (DOM.btnSaveSettings) {
     DOM.btnSaveSettings.addEventListener('click', saveSettings);
   }
-  
+
   if (DOM.btnResetSettings) {
     DOM.btnResetSettings.addEventListener('click', resetSettings);
   }
-  
+
   if (DOM.btnOpenConfig) {
     DOM.btnOpenConfig.addEventListener('click', (e) => {
       e.preventDefault();
       setCurrentView('config');
     });
   }
-  
+
+  // Controle de idioma
+  if (DOM.appLanguage) {
+    DOM.appLanguage.addEventListener('change', e => {
+      changeLanguage(e.target.value);
+    });
+  }
+
   // Controles de configuração em tempo real
   if (DOM.fontSize) {
     DOM.fontSize.addEventListener('input', (e) => {
@@ -1706,7 +2076,7 @@ function setupEventListeners() {
       if (DOM.fontSizeValue) DOM.fontSizeValue.textContent = e.target.value + 'px';
     });
   }
-  
+
   if (DOM.fontFamily) {
     DOM.fontFamily.addEventListener('change', (e) => {
       document.body.style.fontFamily = e.target.value;
@@ -1745,7 +2115,7 @@ function setupEventListeners() {
 }
 
 /* ===========================
-   16) FUNÇÕES AUXILIARES (UI/Helpers)
+   17) FUNÇÕES AUXILIARES (UI/Helpers)
    =========================== */
 
 // Alterna a sidebar visível / escondida e persiste a preferência
@@ -1782,265 +2152,172 @@ function setCurrentView(view) {
 // Atualiza relógio e data na UI
 function updateClock() {
   const now = new Date();
-  if (DOM.todayDate) DOM.todayDate.textContent = now.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' });
-  if (DOM.nowTime) DOM.nowTime.textContent = now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+  const lang = getLang();
+  if (DOM.todayDate) DOM.todayDate.textContent = now.toLocaleDateString(lang, { day: '2-digit', month: '2-digit', year: 'numeric' });
+  if (DOM.nowTime) DOM.nowTime.textContent = now.toLocaleTimeString(lang, { hour: '2-digit', minute: '2-digit' });
 }
 
 /* ===========================
-   17) SISTEMA DE GRÁFICOS - VERSÃO CORRIGIDA
+   18) SISTEMA DE GRÁFICOS - VERSÃO CORRIGIDA
    =========================== */
 
 // Inicializar todos os gráficos
 function initCharts() {
-    console.log('Inicializando gráficos...');
-    
-    if (!state.routines || state.routines.length === 0) {
-        console.log('Nenhuma rotina encontrada para gráficos');
-        renderEmptyCharts();
-        return;
-    }
-    
-    try {
-        renderWeeklyProgressChart();
-        renderTimeDistributionChart();
-        renderHabitsOverTimeChart();
-        renderLifeBalanceChart();
-        renderMonthlyGoalsChart();
-        renderDailyProductivityChart();
-        console.log('Gráficos inicializados com sucesso!');
-    } catch (error) {
-        console.error('Erro ao inicializar gráficos:', error);
-        renderEmptyCharts();
-    }
+  console.log('Inicializando gráficos...');
+
+  if (!state.routines || state.routines.length === 0) {
+    console.log('Nenhuma rotina encontrada para gráficos');
+    renderEmptyCharts();
+    return;
+  }
+
+  try {
+    renderWeeklyProgressChart();
+    renderTimeDistributionChart();
+    renderHabitsOverTimeChart();
+    console.log('Gráficos inicializados com sucesso!');
+  } catch (error) {
+    console.error('Erro ao inicializar gráficos:', error);
+    renderEmptyCharts();
+  }
 }
 
 // Renderizar gráfico de progresso semanal - VERSÃO SIMPLIFICADA
 function renderWeeklyProgressChart() {
-    const ctx = document.getElementById('weeklyProgressChart');
-    if (!ctx) {
-        console.log('Elemento weeklyProgressChart não encontrado');
-        return;
-    }
-    
-    // Destruir gráfico anterior se existir
-    if (ctx.chartInstance) {
-        ctx.chartInstance.destroy();
-    }
-    
-    // Dados de exemplo para teste
-    const weeklyData = [5, 8, 6, 9, 7, 4, 3];
-    
-    ctx.chartInstance = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'],
-            datasets: [{
-                label: 'Tarefas Concluídas',
-                data: weeklyData,
-                backgroundColor: '#ff5454',
-                borderColor: '#ff2c2c',
-                borderWidth: 1
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
-            }
+  const ctx = document.getElementById('weeklyProgressChart');
+  if (!ctx) {
+    console.log('Elemento weeklyProgressChart não encontrado');
+    return;
+  }
+
+  // Destruir gráfico anterior se existir
+  if (ctx.chartInstance) {
+    ctx.chartInstance.destroy();
+  }
+
+  // Dados de exemplo para teste
+  const weeklyData = [5, 8, 6, 9, 7, 4, 3];
+
+  ctx.chartInstance = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: I18N.weekdays[getLang()],
+      datasets: [{
+        label: t('chart.weeklyProgress'),
+        data: weeklyData,
+        backgroundColor: '#ff5454',
+        borderColor: '#ff2c2c',
+        borderWidth: 1
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        y: {
+          beginAtZero: true
         }
-    });
+      }
+    }
+  });
 }
 
 // Renderizar gráfico de distribuição de tempo - VERSÃO SIMPLIFICADA
 function renderTimeDistributionChart() {
-    const ctx = document.getElementById('timeDistributionChart');
-    if (!ctx) return;
-    
-    if (ctx.chartInstance) {
-        ctx.chartInstance.destroy();
+  const ctx = document.getElementById('timeDistributionChart');
+  if (!ctx) return;
+
+  if (ctx.chartInstance) {
+    ctx.chartInstance.destroy();
+  }
+
+  // Dados de exemplo
+  ctx.chartInstance = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels: [t('filter.trabalho'), t('filter.saude'), t('filter.estudos'), t('filter.pessoal')],
+      datasets: [{
+        data: [30, 20, 25, 25],
+        backgroundColor: ['#ff5454', '#4f46e5', '#10b981', '#f59e0b'],
+        borderWidth: 2
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false
     }
-    
-    // Dados de exemplo
-    ctx.chartInstance = new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-            labels: ['Trabalho', 'Saúde', 'Estudos', 'Pessoal'],
-            datasets: [{
-                data: [30, 20, 25, 25],
-                backgroundColor: ['#ff5454', '#4f46e5', '#10b981', '#f59e0b'],
-                borderWidth: 2
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false
-        }
-    });
+  });
 }
 
 // Renderizar gráfico de hábitos ao longo do tempo - VERSÃO SIMPLIFICADA
 function renderHabitsOverTimeChart() {
-    const ctx = document.getElementById('habitsOverTimeChart');
-    if (!ctx) return;
-    
-    if (ctx.chartInstance) {
-        ctx.chartInstance.destroy();
-    }
-    
-    ctx.chartInstance = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: ['01/03', '02/03', '03/03', '04/03', '05/03', '06/03', '07/03'],
-            datasets: [{
-                label: 'Tarefas Concluídas',
-                data: [3, 5, 2, 6, 4, 7, 8],
-                borderColor: '#ff5454',
-                backgroundColor: 'rgba(255, 84, 84, 0.1)',
-                borderWidth: 2,
-                fill: true
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false
-        }
-    });
-}
+  const ctx = document.getElementById('habitsOverTimeChart');
+  if (!ctx) return;
 
-// Renderizar gráfico de equilíbrio de vida - VERSÃO SIMPLIFICADA
-function renderLifeBalanceChart() {
-    const ctx = document.getElementById('lifeBalanceChart');
-    if (!ctx) return;
-    
-    if (ctx.chartInstance) {
-        ctx.chartInstance.destroy();
-    }
-    
-    ctx.chartInstance = new Chart(ctx, {
-        type: 'radar',
-        data: {
-            labels: ['Trabalho', 'Saúde', 'Estudos', 'Pessoal', 'Lazer'],
-            datasets: [{
-                label: 'Distribuição',
-                data: [7, 5, 6, 4, 3],
-                backgroundColor: 'rgba(255, 84, 84, 0.2)',
-                borderColor: '#ff5454',
-                borderWidth: 2
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false
-        }
-    });
-}
+  if (ctx.chartInstance) {
+    ctx.chartInstance.destroy();
+  }
 
-// Renderizar gráfico de metas mensais - VERSÃO SIMPLIFICADA
-function renderMonthlyGoalsChart() {
-    const ctx = document.getElementById('monthlyGoalsChart');
-    if (!ctx) return;
-    
-    if (ctx.chartInstance) {
-        ctx.chartInstance.destroy();
-    }
-    
-    ctx.chartInstance = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: ['Trabalho', 'Saúde', 'Estudos'],
-            datasets: [
-                {
-                    label: 'Concluídas',
-                    data: [8, 5, 7],
-                    backgroundColor: '#10b981'
-                },
-                {
-                    label: 'Pendentes',
-                    data: [2, 5, 3],
-                    backgroundColor: '#ff5454'
-                }
-            ]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            indexAxis: 'y'
-        }
-    });
-}
+  const lang = getLang();
+  const monthNames = I18N.months[lang];
 
-// Renderizar gráfico de produtividade diária - VERSÃO SIMPLIFICADA
-function renderDailyProductivityChart() {
-    const ctx = document.getElementById('dailyProductivityChart');
-    if (!ctx) return;
-    
-    if (ctx.chartInstance) {
-        ctx.chartInstance.destroy();
+  ctx.chartInstance = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: ['01/03', '02/03', '03/03', '04/03', '05/03', '06/03', '07/03'],
+      datasets: [{
+        label: t('chart.habitsOverTime'),
+        data: [3, 5, 2, 6, 4, 7, 8],
+        borderColor: '#ff5454',
+        backgroundColor: 'rgba(255, 84, 84, 0.1)',
+        borderWidth: 2,
+        fill: true
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false
     }
-    
-    ctx.chartInstance = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: ['7h', '9h', '11h', '13h', '15h', '17h', '19h'],
-            datasets: [{
-                label: 'Produtividade',
-                data: [2, 5, 8, 3, 6, 4, 1],
-                borderColor: '#ff5454',
-                backgroundColor: 'rgba(255, 84, 84, 0.2)',
-                borderWidth: 2,
-                fill: true
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false
-        }
-    });
+  });
 }
 
 function renderEmptyCharts() {
-    const chartIds = [
-        'weeklyProgressChart',
-        'timeDistributionChart', 
-        'habitsOverTimeChart',
-        'lifeBalanceChart',
-        'monthlyGoalsChart',
-        'dailyProductivityChart'
-    ];
-    
-    chartIds.forEach(chartId => {
-        const ctx = document.getElementById(chartId);
-        if (ctx) {
-            if (ctx.chartInstance) {
-                ctx.chartInstance.destroy();
-            }
-            
-            // Criar gráfico vazio
-            ctx.chartInstance = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: ['Sem dados'],
-                    datasets: [{
-                        label: 'Adicione rotinas para ver os gráficos',
-                        data: [1],
-                        backgroundColor: '#e5e7eb'
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false
-                }
-            });
+  const chartIds = [
+    'weeklyProgressChart',
+    'timeDistributionChart',
+    'habitsOverTimeChart'
+  ];
+
+  chartIds.forEach(chartId => {
+    const ctx = document.getElementById(chartId);
+    if (ctx) {
+      if (ctx.chartInstance) {
+        ctx.chartInstance.destroy();
+      }
+
+      // Criar gráfico vazio
+      ctx.chartInstance = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: [t('empty.none')],
+          datasets: [{
+            label: t('empty.addRoutines'),
+            data: [1],
+            backgroundColor: '#e5e7eb'
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false
         }
-    });
+      });
+    }
+  });
 }
 
 /* ===========================
-   18) INICIALIZAÇÃO DA APLICAÇÃO
+   19) INICIALIZAÇÃO DA APLICAÇÃO
    =========================== */
 
 // Inicializar a aplicação
-init();
+document.addEventListener('DOMContentLoaded', init);
